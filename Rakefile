@@ -1,7 +1,8 @@
 def symlink(force)
   Dir.glob("#{File.dirname __FILE__}/*") do |entry|
-    if File.directory?(entry) ||
-       (File.expand_path(entry) == File.expand_path(__FILE__))
+    if File.directory?(entry)                                  ||
+       (File.expand_path(entry) == File.expand_path(__FILE__)) ||
+       (File.extname(entry).downcase == '.markdown')
       next
     end
 
