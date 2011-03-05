@@ -6,7 +6,7 @@ def symlink(force)
     end
 
     dotfile = "#{ENV['HOME']}/.#{File.basename entry}"
-    if File.file?(dotfile)
+    if File.symlink?(dotfile) || File.file?(dotfile)
       if force
         File.delete dotfile
         puts "Deleted #{dotfile}"
