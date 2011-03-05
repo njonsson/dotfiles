@@ -5,7 +5,7 @@ def symlink(force)
       next
     end
 
-    dotfile = ENV['HOME'] + "/.#{File.basename entry}"
+    dotfile = "#{ENV['HOME']}/.#{File.basename entry}"
     if File.file?(dotfile)
       if force
         File.delete dotfile
@@ -21,12 +21,12 @@ def symlink(force)
   end
 end
 
-desc "Create symbolic links in #{ENV['HOME']} if no file exists"
+desc "Create symbolic links in #{ENV['HOME']} without overwriting existing files"
 task :symlink do
   symlink false
 end
 
-desc "Create symbolic links in #{ENV['HOME']} if no file exists"
+desc "Create symbolic links in #{ENV['HOME']} without overwriting existing files"
 task '' => :symlink
 
 namespace :symlink do
