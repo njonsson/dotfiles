@@ -1,3 +1,11 @@
+def info(message)
+  puts "*** #{message}"
+end
+
+def success(message)
+  puts "\x1b[32m*** #{message}\x1b[0m"
+end
+
 def symlink(force)
   Dir.glob("#{File.dirname __FILE__}/*") do |entry|
     if File.directory?(entry)                                  ||
@@ -6,20 +14,26 @@ def symlink(force)
       next
     end
 
-    dotfile = "#{ENV['HOME']}/.#{File.basename entry}"
+    basename = File.basename(entry)
+    dotfile = "#{ENV['HOME']}/.#{basename}"
+    dotfile_short = "~/.#{basename}"
     if File.symlink?(dotfile) || File.file?(dotfile)
       if force
         File.delete dotfile
-        puts "Deleted #{dotfile}"
+        info "Deleted #{dotfile_short}"
       else
-        $stderr.puts "#{dotfile} exists!"
+        warning "Not replacing existing #{dotfile_short}"
         next
       end
     end
     if system("ln -s #{entry} #{dotfile}")
-      puts "Linked #{entry} to #{dotfile}"
+      success "Symlinked #{dotfile_short} to #{basename}"
     end
   end
+end
+
+def warning(message)
+  puts "\x1b[31m*** #{message}\x1b[0m"
 end
 
 desc "Create symbolic links in #{ENV['HOME']} without overwriting existing files"
