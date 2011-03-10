@@ -22,8 +22,16 @@ def generate_or_symlink(file, options={})
     end
     success "Generated #{dotfile_short} from #{File.basename(file)}"
   else
-    if system("ln -s #{file} #{dotfile}")
-      success "Symlinked from #{dotfile_short} to #{basename}"
+    begin
+      File.symlink file, dotfile
+    rescue NotImplementedError
+      warning 'Symlinks are not supported on your system'
+      File.open dotfile, 'w' do |f|
+        f.write File.read(file)
+      end
+      success "Copied to #{dotfile_short} from #{basename}"
+    else
+      success "Symlinked #{dotfile_short} to #{basename}"
     end
   end
 end
