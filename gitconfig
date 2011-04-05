@@ -1,5 +1,14 @@
+[branch]
+	autosetupmerge = true
+[color]
+	ui = auto
+[diff]
+	mnemonicprefix = true
+	renames = copies
+[merge]
+	stat = true
+[rerere]
+	enabled = true
 [user]
 	name = Nils Jonsson
 	email = nils@alumni.rice.edu
-[color]
-	ui = auto
