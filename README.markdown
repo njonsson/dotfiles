@@ -9,9 +9,14 @@ This repository contains my OS X shell configuration.
 
 You should see the following, where _~_ is the path to your home directory:
 
-    rake              # Create symbolic links and generate files in ~ without overwriting existing files
-    rake setup        # Create symbolic links and generate files in ~ without overwriting existing files
-    rake setup:force  # Delete and recreate symbolic links and generated files in ~
+    rake                        # Perform all setup tasks without overwriting existing files
+    rake set_up                 # Perform all setup tasks without overwriting existing files
+    rake set_up:all             # Perform all setup tasks without overwriting existing files
+    rake set_up:all:force       # Perform all setup tasks, replacing files as necessary
+    rake set_up:dotfiles        # Set up dotfiles in ~
+    rake set_up:dotfiles:force  # Delete and recreate dotfiles in ~
+    rake set_up:fonts           # Set up fonts
+    rake set_up:fonts:force     # Set up fonts, replacing files as necessary
 
 When you type `rake`, all the files in the root of this repository† are either
 symbolically linked or generated into your home directory, with a dot prepended
@@ -24,6 +29,16 @@ directory).
 Leaving off the dots in these files makes them more convenient for me to edit
 and manage, and it allows me to ignore dotfiles that pertain to this repository
 rather than to my home directory.
+
+Credits
+-------
+
+The
+[Mensch](http://robey.lag.net/2010/06/21/mensch-font.html "Mensch, A Coding Font")
+font was created by [Robey Pointer](http://robey.lag.net).
+
+The [Solarized](http://ethanschoonover.com/solarized) color schemes were created
+by [Ethan Schoonover](http://ethanschoonover.com).
 
 ----------------------------------------------------------------
 
