@@ -89,9 +89,6 @@ namespace :set_up do
 
       generate_or_symlink entry, nil
     end
-
-    generate_or_symlink "#{File.dirname __FILE__}/solarized/vim-colors-solarized/colors/solarized.vim",
-                        "#{ENV['HOME']}/.vim/colors/solarized.vim"
   end
 
   namespace :dotfiles do
