@@ -1,3 +1,1 @@
-# rvm_archflags="-arch x86_64"
-# export LDFLAGS=-L/usr/local/Cellar/openssl/0.9.8r/lib
-# export CPPFLAGS=-I/usr/local/Cellar/openssl/0.9.8r/include
+export rvm_archflags="-arch x86_64"
