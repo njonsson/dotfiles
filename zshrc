@@ -30,6 +30,8 @@ source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 
+alias rspec='nocorrect rspec'
+
 export PATH="$HOME/bin:/usr/local/bin:$PATH"
 export EDITOR="mvim --nofork"
 export GEM_OPEN_EDITOR=mvim
