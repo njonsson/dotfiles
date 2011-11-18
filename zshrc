@@ -30,6 +30,7 @@ source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 
+alias rake='noglob rake'
 alias rspec='nocorrect rspec'
 alias tree='nocorrect tree'
 
