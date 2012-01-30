@@ -7,10 +7,10 @@
 :verbose: true
 :update_sources: true
 :bulk_threshold: 1000
-test_options:
-  auto_test_on_install: true
+test_options: 
   test_on_install: true
   install_development_dependencies: true
+  auto_test_on_install: true
   test_development_dependencies: false
   force_install: false
   force_uninstall_on_failure: false
