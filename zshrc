@@ -36,8 +36,8 @@ alias rspec='nocorrect rspec'
 alias tree='nocorrect tree'
 
 export PATH="$HOME/bin:/usr/local/bin:$PATH"
-export EDITOR="mvim --nofork"
-export GEM_OPEN_EDITOR=mvim
+export EDITOR="/usr/bin/env vim"
+export GEM_OPEN_EDITOR="$EDITOR"
 
 [[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
 
