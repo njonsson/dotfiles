@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <title>Nils’s dotfiles by njonsson</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Nils’s dotfiles</h1>
+        <h2>How I roll</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/njonsson/dotfiles/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/njonsson/dotfiles/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/njonsson/dotfiles" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <p>This repository contains my OS X shell configuration.</p>
+
+<ol>
+<li>Clone this repository.</li>
+<li>
+<code>cd</code> into it.</li>
+<li>Type <code>rake --tasks</code>.</li>
+</ol><p>You should see the following, where <em>~</em> is the path to your home directory:</p>
+
+<pre><code>rake                        # Perform all setup tasks without overwriting existing files
+rake set_up                 # Perform all setup tasks without overwriting existing files
+rake set_up:all             # Perform all setup tasks without overwriting existing files
+rake set_up:all:force       # Perform all setup tasks, replacing files as necessary
+rake set_up:dotfiles        # Set up dotfiles in ~
+rake set_up:dotfiles:force  # Delete and recreate dotfiles in ~
+rake set_up:fonts           # Set up fonts
+rake set_up:fonts:force     # Set up fonts, replacing files as necessary
+</code></pre>
+
+<p>When you type <code>rake</code>, all the files in the root of this repository† are either
+symbolically linked or generated into your home directory, with a dot prepended
+to the filename of each link. For example, the <em>gemrc</em> in this repository gets
+symbolically linked to <em>~/.gemrc</em> (unless there is already a <em>.gemrc</em> in your
+home directory). The <em>vimrc.local.erb</em> in this repository is used to generate
+<em>~/.vimrc.local</em> (unless there is already a <em>.vimrc.local</em> in your home
+directory).</p>
+
+<p>Leaving off the dots in these files makes them more convenient for me to edit
+and manage, and it allows me to ignore dotfiles that pertain to this repository
+rather than to my home directory.</p>
+
+<h2>Credits</h2>
+
+<p>The
+<a href="http://robey.lag.net/2010/06/21/mensch-font.html" title="Mensch, A Coding Font">Mensch</a>
+font was created by <a href="http://robey.lag.net">Robey Pointer</a>.</p>
+
+<p>The <a href="http://ethanschoonover.com/solarized">Solarized</a> color schemes were created
+by <a href="http://ethanschoonover.com">Ethan Schoonover</a>.</p>
+
+<hr><p>† Note: <em>Rakefile</em> and <em>*.markdown</em> are not treated as dotfiles.</p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
