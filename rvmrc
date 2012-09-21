@@ -1,4 +1,0 @@
-# Allow REE to build (see https://groups.google.com/group/emm-ruby/browse_thread/thread/b58b617d9bc7a222/afaf6f1bf2cdeba6?show_docid=afaf6f1bf2cdeba6&pli=1)
-export CC=/usr/bin/gcc-4.2
-
-export rvm_archflags="-arch x86_64"
