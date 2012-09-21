@@ -33,6 +33,7 @@ source $ZSH/oh-my-zsh.sh
 alias git='noglob git'
 alias rake='noglob rake'
 alias rspec='nocorrect rspec'
+alias tmux='nocorrect tmux'
 alias tree='nocorrect tree'
 
 export PATH="$HOME/bin:/usr/local/bin:$PATH"
