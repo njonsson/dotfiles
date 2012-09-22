@@ -35,7 +35,8 @@ Credits
 
 The
 [Mensch](http://robey.lag.net/2010/06/21/mensch-font.html "Mensch, A Coding Font")
-font was created by [Robey Pointer](http://robey.lag.net).
+font was created by [Robey Pointer](http://robey.lag.net). It is patched for use
+with [Powerline](http://github.com/Lokaltog/vim-powerline "Vim Powerline").
 
 The [Solarized](http://ethanschoonover.com/solarized) color schemes were created
 by [Ethan Schoonover](http://ethanschoonover.com).

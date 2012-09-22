@@ -101,7 +101,7 @@ namespace :set_up do
     target_dir = "#{ENV['HOME']}/Library/Fonts"
     fail unless system("mkdir -p #{target_dir}")
 
-    pattern = "#{File.expand_path File.dirname(__FILE__)}/resources/*.ttf"
+    pattern = "#{File.expand_path File.dirname(__FILE__)}/resources/*.[ot]tf"
     Dir.glob(pattern) do |font|
       next unless File.file?(font)
 
