@@ -5,6 +5,9 @@ filetype plugin on
 filetype indent on
 syntax on
 
+set cursorline
+set cursorcolumn
+
 let NERDTreeShowHidden=1
 
 " Solarized color scheme
