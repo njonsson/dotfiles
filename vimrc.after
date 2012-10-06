@@ -5,6 +5,7 @@ filetype plugin on
 filetype indent on
 syntax on
 
+set rnu
 set cursorline
 set cursorcolumn
 
