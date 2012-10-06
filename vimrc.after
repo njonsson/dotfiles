@@ -7,7 +7,7 @@ syntax on
 
 set rnu
 set cursorline
-set cursorcolumn
+set colorcolumn=81
 
 let NERDTreeShowHidden=1
 
