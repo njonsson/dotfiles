@@ -5,7 +5,8 @@ filetype plugin on
 filetype indent on
 syntax on
 
-set rnu
+autocmd BufEnter * set relativenumber
+autocmd BufLeave * set norelativenumber
 set cursorline
 set colorcolumn=81
 
