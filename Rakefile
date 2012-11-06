@@ -17,25 +17,26 @@ def erb?(file)
   !(file !~ /\.erb$/i)
 end
 
-def generate_or_symlink(file, dotfile=nil)
-  basename = File.basename(file, (erb?(file) ? File.extname(file) : ''))
-  dotfile ||= "#{ENV['HOME']}/.#{basename}"
-  return unless delete_if_exists(dotfile)
-
-  if erb?(file)
-    File.open dotfile, 'w' do |f|
-      f.write ERB.new(File.read(file)).result
+def generate_or_symlink(source)
+  if erb?(source)
+    source_basename = File.basename(source, File.extname(source))
+    target = yield("#{File.dirname source}/#{source_basename}")
+    return unless delete_if_exists(target)
+    File.open target, 'w' do |f|
+      f.write ERB.new(File.read(source)).result
     end
-    success "Generated #{short_name dotfile} from #{short_name file}"
+    success "Generated #{short_name target} from #{short_name source}"
   else
+    target = yield(source)
+    return unless delete_if_exists(target)
     begin
-      File.symlink file, dotfile
+      File.symlink source, target
     rescue NotImplementedError
       warning 'Symlinks are not supported on your system'
-      return unless system("cp #{file} #{dotfile}")
-      success "Copied to #{short_name dotfile} from #{short_name file}"
+      return unless system("cp #{source} #{target}")
+      success "Copied to #{short_name target} from #{short_name source}"
     else
-      success "Symlinked #{short_name dotfile} to #{short_name file}"
+      success "Symlinked #{short_name target} to #{short_name source}"
     end
   end
 end
@@ -71,11 +72,30 @@ task :set_up => 'set_up:all'
 
 namespace :set_up do
   desc 'Perform all setup tasks without overwriting existing files'
-  task :all => [:dotfiles, :fonts]
+  task :all => [:bin, :dotfiles, :fonts]
 
   namespace :all do
     desc 'Perform all setup tasks, replacing files as necessary'
     task :force => [:set_force_option, 'set_up:all']
+  end
+
+  desc 'Set up scripts'
+  task :bin do
+    target_dir = "#{ENV['HOME']}/bin"
+    fail unless system("mkdir -p #{target_dir}")
+
+    pattern = "#{File.expand_path File.dirname(__FILE__)}/resources/*.{bash,rb,sh}"
+    Dir.glob(pattern) do |script|
+      generate_or_symlink script do |source|
+        source_basename = File.basename(source, File.extname(source))
+        "#{ENV['HOME']}/bin/#{source_basename}"
+      end
+    end
+  end
+
+  namespace :bin do
+    desc 'Set up scripts, replacing files as necessary'
+    task :force => [:set_force_option, 'set_up:bin']
   end
 
   desc "Set up dotfiles in #{ENV['HOME']}"
@@ -87,7 +107,9 @@ namespace :set_up do
         next
       end
 
-      generate_or_symlink entry, nil
+      generate_or_symlink entry do |source|
+        "#{ENV['HOME']}/.#{File.basename source}"
+      end
     end
   end
 
