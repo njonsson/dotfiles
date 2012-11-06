@@ -25,7 +25,7 @@ case $? in
   # Exit code 0: bundle is defined and installed
   # Exit code 1: bundle is defined but not installed
   0|1 )
-    echo "* Detected Bundler"
+    echo "* Detected Bundler configuration"
     bundler=true
     ;;
 esac
@@ -46,7 +46,7 @@ tmux send-keys -t $session_name 'vim .' C-m
 tmux split-window -h -p 40 -t $session_name
 guard show >/dev/null 2>&1
 if [ $? = 0 ]; then
-  echo "* Detected Guard"
+  echo "* Detected Guard configuration"
   tmux send-keys -t $session_name:1.2 "$command_prefix guard --clear" C-m
   tmux split-window -v -p 40 -t $session_name
 fi
