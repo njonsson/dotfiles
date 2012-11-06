@@ -69,11 +69,6 @@ else
   else
     tmux send-keys -t $session_name:2 "irb" C-m
   fi
-  if [ -f *.gemspec ]; then
-    echo "* Detected RubyGems project"
-    sleep 3
-    tmux send-keys -t $session_name:2 "require '`basename $(ls *.gemspec | head -1) .gemspec`'" C-m
-  fi
 
   sleep 8 # This is a workaround for `automatic-rename off`.
   tmux rename-window -t $session_name:2 REPL
