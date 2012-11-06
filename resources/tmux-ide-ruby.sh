@@ -36,36 +36,37 @@ if [ $bundler ]; then
 fi
 
 session_name=`basename $(pwd)`
-tmux new-session -s $session_name -d
+tmux_cmd="tmux -S /var/tmux/$session_name"
+$tmux_cmd new-session -s $session_name -d
 
-tmux rename-window -t $session_name:1 'code/test'
-tmux send-keys -t $session_name 'vim .' C-m
+$tmux_cmd rename-window -t $session_name:1 'code/test'
+$tmux_cmd send-keys -t $session_name 'vim .' C-m
 
-tmux split-window -h -p 40 -t $session_name
+$tmux_cmd split-window -h -p 40 -t $session_name
 guard show >/dev/null 2>&1
 if [ $? = 0 ]; then
   echo "* Detected Guard configuration"
-  tmux send-keys -t $session_name:1.2 "$command_prefix guard --clear" C-m
-  tmux split-window -v -p 40 -t $session_name
+  $tmux_cmd send-keys -t $session_name:1.2 "$command_prefix guard --clear" C-m
+  $tmux_cmd split-window -v -p 40 -t $session_name
 fi
 
 if [ -d app ] && [ -d config ] && [ -d db ]; then
   echo "* Detected Rails project"
-  tmux new-window -t $session_name -n 'web server'
-  tmux send-keys -t $session_name:2 "$command_prefix `if [ -f script/server ]; then echo 'script/'; else echo 'rails '; fi`server" C-m
+  $tmux_cmd new-window -t $session_name -n 'web server'
+  $tmux_cmd send-keys -t $session_name:2 "$command_prefix `if [ -f script/server ]; then echo 'script/'; else echo 'rails '; fi`server" C-m
 
-  tmux new-window -t $session_name -n REPL
-  tmux send-keys -t $session_name:3 "$command_prefix `if [ -f script/console ]; then echo 'script/'; else echo 'rails '; fi`console" C-m
+  $tmux_cmd new-window -t $session_name -n REPL
+  $tmux_cmd send-keys -t $session_name:3 "$command_prefix `if [ -f script/console ]; then echo 'script/'; else echo 'rails '; fi`console" C-m
 else
-  tmux new-window -t $session_name -n REPL
+  $tmux_cmd new-window -t $session_name -n REPL
   if [ $bundler ]; then
-    tmux send-keys -t $session_name:2 "bundle console" C-m
+    $tmux_cmd send-keys -t $session_name:2 "bundle console" C-m
   else
-    tmux send-keys -t $session_name:2 "irb" C-m
+    $tmux_cmd send-keys -t $session_name:2 "irb" C-m
   fi
 fi
 
-tmux select-window -t $session_name:1
-tmux select-pane -t $session_name:1.1
+$tmux_cmd select-window -t $session_name:1
+$tmux_cmd select-pane -t $session_name:1.1
 
-tmux attach-session -t $session_name
+$tmux_cmd attach-session -t $session_name
