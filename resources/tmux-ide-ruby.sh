@@ -38,11 +38,9 @@ fi
 session_name=`basename $(pwd)`
 tmux new-session -s $session_name -d
 
-# These settings seem to have no effect.
-tmux set-option -gt $session_name set-titles off > /dev/null
-tmux set-window-option -gt $session_name automatic-rename off > /dev/null
-
+tmux rename-window -t $session_name:1 'code/test'
 tmux send-keys -t $session_name 'vim .' C-m
+
 tmux split-window -h -p 40 -t $session_name
 guard show >/dev/null 2>&1
 if [ $? = 0 ]; then
@@ -53,28 +51,19 @@ fi
 
 if [ -d app ] && [ -d config ] && [ -d db ]; then
   echo "* Detected Rails project"
-  tmux new-window -t $session_name
+  tmux new-window -t $session_name -n 'web server'
   tmux send-keys -t $session_name:2 "$command_prefix `if [ -f script/server ]; then echo 'script/'; else echo 'rails '; fi`server" C-m
 
-  tmux new-window -t $session_name
+  tmux new-window -t $session_name -n REPL
   tmux send-keys -t $session_name:3 "$command_prefix `if [ -f script/console ]; then echo 'script/'; else echo 'rails '; fi`console" C-m
-
-  sleep 16 # This is a workaround for `automatic-rename off`.
-  tmux rename-window -t $session_name:2 'web server'
-  tmux rename-window -t $session_name:3 REPL
 else
-  tmux new-window -t $session_name
+  tmux new-window -t $session_name -n REPL
   if [ $bundler ]; then
     tmux send-keys -t $session_name:2 "bundle console" C-m
   else
     tmux send-keys -t $session_name:2 "irb" C-m
   fi
-
-  sleep 8 # This is a workaround for `automatic-rename off`.
-  tmux rename-window -t $session_name:2 REPL
 fi
-
-tmux rename-window -t $session_name:1 'code/test'
 
 tmux select-window -t $session_name:1
 tmux select-pane -t $session_name:1.1
