@@ -1,25 +1,13 @@
 #! /usr/bin/env sh
 
 me=`basename $0`
-bundler=''
 case $@ in
   "--help"|"-h" )
     echo Usage:
-    echo "  $me [--no-bundler]"
+    echo "  $me"
     exit
     ;;
-  "--no-bundler" )
-    echo * Ignoring Bundler
-    ;;
   "" )
-    bundle check >/dev/null 2>&1
-    case $? in
-      # Exit code 0: bundle is defined and installed
-      # Exit code 1: bundle is defined but not installed
-      0|1 )
-        bundler=true
-        ;;
-    esac
     ;;
   * )
     echo Arguments '"'$@'"' not recognized
@@ -28,10 +16,22 @@ case $@ in
     exit
     ;;
 esac
+
 echo Setting up tmux IDE for Ruby
+
+bundler=''
+bundle check >/dev/null 2>&1
+case $? in
+  # Exit code 0: bundle is defined and installed
+  # Exit code 1: bundle is defined but not installed
+  0|1 )
+    echo "* Detected Bundler"
+    bundler=true
+    ;;
+esac
+
 command_prefix=""
 if [ $bundler ]; then
-  echo "* Detected Bundler"
   command_prefix="bundle exec"
 fi
 
