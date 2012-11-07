@@ -79,7 +79,7 @@ namespace :set_up do
     task :force => [:set_force_option, 'set_up:all']
   end
 
-  desc 'Set up scripts'
+  desc 'Generate or symlink scripts into ~/bin'
   task :bin do
     target_dir = "#{ENV['HOME']}/bin"
     fail unless system("mkdir -p #{target_dir}")
@@ -98,7 +98,7 @@ namespace :set_up do
     task :force => [:set_force_option, 'set_up:bin']
   end
 
-  desc "Set up dotfiles in #{ENV['HOME']}"
+  desc 'Generate or symlink dotfiles into ~'
   task :dotfiles => :update_git_submodules do
     Dir.glob("#{File.dirname __FILE__}/*") do |entry|
       if File.directory?(entry)                                  ||
@@ -114,11 +114,11 @@ namespace :set_up do
   end
 
   namespace :dotfiles do
-    desc "Delete and recreate dotfiles in #{ENV['HOME']}"
+    desc 'Set up dotfiles, replacing files as necessary'
     task :force => [:set_force_option, 'set_up:dotfiles']
   end
 
-  desc 'Set up fonts'
+  desc 'Copy fonts into ~/Library/Fonts'
   task :fonts do
     target_dir = "#{ENV['HOME']}/Library/Fonts"
     fail unless system("mkdir -p #{target_dir}")
