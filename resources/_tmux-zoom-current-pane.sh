@@ -1,19 +1,16 @@
 #! /usr/bin/env sh
 
-maximized_pane_id_delimiter=@
-maximized_pane_prefix=_TMUX_MAXIMIZED_PANE_$maximized_pane_id_delimiter
-
+maximized_pane_prefix=_TMUX_MAXIMIZED_PANE_
 current_pane_id=`tmux list-panes -F "#{pane_active} #{pane_id}" | sed -n -e '/^1 /s/^1 %\([0-9]*\)$/\1/gp'`
-current_window_name_starts_with=$(tmux display -p "#${#maximized_pane_prefix}W")
+current_window_name=`tmux display -p '#{window_name}'`
 
 current_window_is_a_maximized_pane=''
-if [ $current_window_name_starts_with = $maximized_pane_prefix ]; then
+if [ ${current_window_name:0:${#maximized_pane_prefix}} = $maximized_pane_prefix ]; then
   current_window_is_a_maximized_pane=true
 fi
 
 if [ $current_window_is_a_maximized_pane ]; then
-  current_window_name=$(tmux display -p '#W')
-  maximized_pane_id=`echo $current_window_name | rev | cut -f 1 -d "$maximized_pane_id_delimiter" | rev`
+  maximized_pane_id=${current_window_name:${#maximized_pane_prefix}}
   tmux select-window -t "%$maximized_pane_id"
   tmux select-pane   -t "%$maximized_pane_id"
   tmux swap-pane     -s "%$current_pane_id"
