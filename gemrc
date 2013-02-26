@@ -1,7 +1,6 @@
 --- 
 :sources: 
 - http://rubygems.org/
-- http://dev.staging.iberon.com/gemserver/
 :backtrace: false
 :benchmark: false
 :verbose: true
