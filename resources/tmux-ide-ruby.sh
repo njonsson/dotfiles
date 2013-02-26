@@ -46,7 +46,7 @@ $tmux_cmd split-window -h -p 40 -t $session_name
 guard show >/dev/null 2>&1
 if [ $? = 0 ]; then
   echo "* Detected Guard configuration"
-  $tmux_cmd send-keys -t $session_name:1.2 "$command_prefix guard --clear" C-m
+  $tmux_cmd send-keys -t $session_name:1.2 "$command_prefix guard" C-m
   $tmux_cmd split-window -v -p 40 -t $session_name
 fi
 
