@@ -8,7 +8,7 @@ syntax on
 autocmd BufEnter * set relativenumber
 autocmd BufLeave * set norelativenumber
 set cursorline
-set colorcolumn=81
+set colorcolumn=82
 
 let NERDTreeShowHidden=1
 
