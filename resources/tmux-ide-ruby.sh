@@ -40,14 +40,14 @@ tmux_cmd="tmux -S /var/tmux/$session_name"
 $tmux_cmd new-session -s $session_name -d
 
 $tmux_cmd rename-window -t $session_name:1 'code/test'
-$tmux_cmd send-keys -t $session_name C-m 'vim .' C-m
+$tmux_cmd send-keys -t $session_name:1.1 C-m 'vim .' C-m
 
-$tmux_cmd split-window -h -p 40 -t $session_name
+$tmux_cmd split-window -h -p 40 -t $session_name:1.1
 guard show >/dev/null 2>&1
 if [ $? = 0 ]; then
   echo "* Detected Guard configuration"
   $tmux_cmd send-keys -t $session_name:1.2 "$command_prefix guard" C-m
-  $tmux_cmd split-window -v -p 40 -t $session_name
+  $tmux_cmd split-window -v -p 40 -t $session_name:1.2
 fi
 
 if [ -d app ] && [ -d config ] && [ -d db ]; then
