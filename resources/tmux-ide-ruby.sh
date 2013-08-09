@@ -40,7 +40,7 @@ tmux_cmd="tmux -S /var/tmux/$session_name"
 $tmux_cmd new-session -s $session_name -d
 
 $tmux_cmd rename-window -t $session_name:1 'code/test'
-$tmux_cmd send-keys -t $session_name 'vim .' C-m
+$tmux_cmd send-keys -t $session_name C-m 'vim .' C-m
 
 $tmux_cmd split-window -h -p 40 -t $session_name
 guard show >/dev/null 2>&1
