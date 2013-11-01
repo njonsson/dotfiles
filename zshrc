@@ -36,7 +36,7 @@ alias rspec='nocorrect rspec'
 alias tmux='nocorrect tmux'
 alias tree='nocorrect tree'
 
-export PATH="$HOME/bin:/usr/local/bin:$PATH"
+export PATH="$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH"
 export EDITOR="/usr/bin/env vim"
 export GEM_OPEN_EDITOR="$EDITOR"
 
