@@ -44,8 +44,14 @@ $tmux_cmd send-keys -t $session_name:1.1 C-m 'vim .' C-m
 
 $tmux_cmd split-window -h -p 40 -t $session_name:1.1
 
-$bundle_exec guard show >/dev/null 2>&1
-if [ $? = 0 ]; then
+guard=''
+if [ -e Guardfile ]; then
+  which guard >/dev/null
+  if [ $? = 0 ]; then
+    guard=true
+  fi
+fi
+if [ $guard ]; then
   echo "* Detected Guard configuration"
   $tmux_cmd send-keys -t $session_name:1.2 "$bundle_exec guard" C-m
   $tmux_cmd split-window -v -p 40 -t $session_name:1.2
