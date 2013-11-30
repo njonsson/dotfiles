@@ -30,9 +30,9 @@ case $? in
     ;;
 esac
 
-command_prefix=""
+bundle_exec=""
 if [ $bundler ]; then
-  command_prefix="bundle exec"
+  bundle_exec="bundle exec"
 fi
 
 session_name=`basename $(pwd)`
@@ -43,20 +43,21 @@ $tmux_cmd rename-window -t $session_name:1 'code/test'
 $tmux_cmd send-keys -t $session_name:1.1 C-m 'vim .' C-m
 
 $tmux_cmd split-window -h -p 40 -t $session_name:1.1
+
 guard show >/dev/null 2>&1
 if [ $? = 0 ]; then
   echo "* Detected Guard configuration"
-  $tmux_cmd send-keys -t $session_name:1.2 "$command_prefix guard" C-m
+  $tmux_cmd send-keys -t $session_name:1.2 "$bundle_exec guard" C-m
   $tmux_cmd split-window -v -p 40 -t $session_name:1.2
 fi
 
 if [ -d app ] && [ -d config ] && [ -d db ]; then
   echo "* Detected Rails project"
   $tmux_cmd new-window -t $session_name -n 'web server'
-  $tmux_cmd send-keys -t $session_name:2 "$command_prefix `if [ -f script/server ]; then echo 'script/'; else echo 'rails '; fi`server" C-m
+  $tmux_cmd send-keys -t $session_name:2 "$bundle_exec `if [ -f script/server ]; then echo 'script/'; else echo 'rails '; fi`server" C-m
 
   $tmux_cmd new-window -t $session_name -n REPL
-  $tmux_cmd send-keys -t $session_name:3 "$command_prefix `if [ -f script/console ]; then echo 'script/'; else echo 'rails '; fi`console" C-m
+  $tmux_cmd send-keys -t $session_name:3 "$bundle_exec `if [ -f script/console ]; then echo 'script/'; else echo 'rails '; fi`console" C-m
 else
   $tmux_cmd new-window -t $session_name -n REPL
   if [ $bundler ]; then
