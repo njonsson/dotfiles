@@ -30,6 +30,12 @@ source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 
+# Use Vim line editing.
+bindkey -v
+
+# Reduce the Esc key delay to 0.1s.
+export KEYTIMEOUT=1
+
 alias git='noglob git'
 alias rake='noglob rake'
 alias rspec='nocorrect rspec'
