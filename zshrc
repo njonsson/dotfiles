@@ -43,3 +43,11 @@ export GEM_OPEN_EDITOR="$EDITOR"
 [[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+if [ -s ~/.todo.markdown ]; then
+  echo
+  echo To-Do List
+  echo ----------
+  cat ~/.todo.markdown
+  echo
+fi
