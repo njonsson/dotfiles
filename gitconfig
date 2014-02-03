@@ -15,3 +15,4 @@
 	email = nils@alumni.rice.edu
 [alias]
 	lg = log --abbrev-commit --decorate --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+  spring-cleaning = for-each-ref --format='%(refname:short) ... %(committerdate:short)' --sort=-committerdate
