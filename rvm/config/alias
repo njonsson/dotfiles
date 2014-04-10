@@ -1,0 +1,5 @@
+default=ruby-2.1.0
+os-x-mavericks=ruby-2.0.0-p195
+os-x-mountain-lion=ruby-1.8.7-p358
+os-x-lion=ruby-1.8.7-p249
+os-x-snow-leopard=ruby-1.8.7-p174
