@@ -21,10 +21,10 @@ perform() {
   output=`$command 2>&1`
   result=$?
   if [[ $result -eq 0 ]]; then
-    echo OK
+    echo -e "\033[32mOK\033[0m"
   else
-    echo ERROR!
-    echo "$output" >&2
+    echo -e "\033[31mERROR!\033[0m"
+    echo -e "$output" >&2
     exit $result
   fi
 }
@@ -39,10 +39,10 @@ diff <(git merge-base origin/master origin/$BRANCH) \
      >/dev/null                                     \
      2>&1
 if [[ $? -eq 0 ]]; then
-  echo YES
+  echo -e "\033[32mYES\033[0m"
   exit 0
 else
-  echo NO
+  echo -e "\033[31mNO\033[0m"
 fi
 
 announce "Ensuring working tree is clean"
