@@ -1,8 +1,9 @@
 #! /usr/bin/env bash
 
 case $1 in
-  "" | "--help" | "-h")
+  "--help" | "-h")
     echo Usage:
+    echo "  git rebase-onto-latest-origin-master"
     echo "  git rebase-onto-latest-origin-master BRANCH"
     echo "  git rebase-onto-latest-origin-master --help"
     echo "  git rebase-onto-latest-origin-master -h"
@@ -10,10 +11,12 @@ case $1 in
     ;;
 esac
 
-BRANCH=$1
-
 announce() {
   echo -n "*** $1 ... "
+}
+
+git_current_branch() {
+  git rev-parse --abbrev-ref HEAD
 }
 
 perform() {
@@ -28,6 +31,20 @@ perform() {
     exit $result
   fi
 }
+
+BRANCH=$1
+if [ -z $BRANCH ]; then
+  BRANCH=$(git_current_branch)
+fi
+
+announce "Determining whether my $BRANCH has unpushed commits"
+if [ `git ls-remote origin $BRANCH | cut -f 1` == \
+     `git show $BRANCH --format=format:%H --no-patch` ]; then
+  echo -e "\033[32mNO\033[0m"
+else
+  echo -e "\033[31mYES\033[0m"
+  exit 1
+fi
 
 announce "Fetching master and $BRANCH from origin"
 perform  "git fetch origin master $BRANCH"
@@ -48,8 +65,10 @@ fi
 announce "Ensuring working tree is clean"
 perform  "git diff --exit-code"
 
-announce "Checking out $BRANCH"
-perform  "git checkout $BRANCH"
+if [ "$BRANCH" != git_current_branch ]; then
+  announce "Checking out $BRANCH"
+  perform  "git checkout $BRANCH"
+fi
 
 announce "Forcibly resetting my $BRANCH to origin/$BRANCH (was `git show $BRANCH --format=format:%h --no-patch`)"
 perform  "git reset --hard origin/$BRANCH"
