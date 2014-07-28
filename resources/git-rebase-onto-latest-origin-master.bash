@@ -13,7 +13,7 @@ esac
 BRANCH=$1
 
 announce() {
-  echo -n "*** $1 ... "
+  echo -e -n "*** $1 ... "
 }
 
 perform() {
@@ -29,10 +29,10 @@ perform() {
   fi
 }
 
-announce "Fetching master and $BRANCH from origin"
+announce "Fetching \033[4mmaster\033[0m and \033[4m$BRANCH\033[0m from \033[4morigin\033[0m"
 perform  "git fetch origin master $BRANCH"
 
-announce "At origin, determining whether $BRANCH is already based on latest HEAD of master"
+announce "At \033[4morigin\033[0m, determining whether \033[4m$BRANCH\033[0m is already based on latest HEAD of \033[4mmaster\033[0m"
 # Bash understands the <(COMMAND) syntax, whereas sh does not.
 diff <(git merge-base origin/master origin/$BRANCH) \
      <(git ls-remote origin master | cut -f 1)      \
@@ -48,16 +48,16 @@ fi
 announce "Ensuring working tree is clean"
 perform  "git diff --exit-code"
 
-announce "Checking out $BRANCH"
+announce "Checking out \033[4m$BRANCH\033[0m"
 perform  "git checkout $BRANCH"
 
-announce "Forcibly resetting my $BRANCH to origin/$BRANCH (was `git show $BRANCH --format=format:%h --no-patch`)"
+announce "Forcibly resetting my \033[4m$BRANCH\033[0m to \033[4morigin/$BRANCH\033[0m (was \033[4m`git show $BRANCH --format=format:%h --no-patch`\033[0m)"
 perform  "git reset --hard origin/$BRANCH"
 
-announce "Rebasing my $BRANCH onto origin/master"
+announce "Rebasing my \033[4m$BRANCH\033[0m onto \033[4morigin/master\033[0m"
 perform  "git rebase origin/master $BRANCH"
 
-announce "Forcibly pushing my $BRANCH to origin (was `git ls-remote origin $BRANCH | cut -c 1-7`)"
+announce "Forcibly pushing my \033[4m$BRANCH\033[0m to \033[4morigin\033[0m (was \033[4m`git ls-remote origin $BRANCH | cut -c 1-7`\033[0m)"
 perform  "git push origin $BRANCH --force"
 
 exit 0

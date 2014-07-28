@@ -38,7 +38,7 @@ else
   TAG=$output
 fi
 
-announce "Starting a new hotfix \033[4m$HOTFIX\033[0m from \033[4m$TAG\033[0m (`git show $TAG --format=format:%h --no-patch`)"
+announce "Starting a new hotfix \033[4m$HOTFIX\033[0m from \033[4m$TAG\033[0m (\033[4m`git show $TAG --format=format:%h --no-patch`\033[0m)"
 perform "git checkout -b $HOTFIX $TAG"
 
 exit 0
