@@ -18,3 +18,5 @@
   spring-cleaning = for-each-ref --format='%(refname:short) ... %(committerdate:short)' --sort=-committerdate
 [push]
 	default = simple
+[core]
+	excludesfile = /Users/nils/.gitignore_global
