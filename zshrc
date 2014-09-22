@@ -43,6 +43,7 @@ export GEM_OPEN_EDITOR="$EDITOR"
 [[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+PATH=$PATH:/Library/Frameworks/AndroidDeveloperTools/sdk/platform-tools # Add Android SDK platform tools to PATH
 
 if [ -s ~/.todo.markdown ]; then
   echo
