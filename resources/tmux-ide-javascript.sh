@@ -23,7 +23,7 @@ session_name=`basename $(pwd)`
 tmux_cmd="tmux -S /var/tmux/$session_name"
 $tmux_cmd new-session -s $session_name -d
 
-$tmux_cmd rename-window -t $session_name:1 'code/test'
+$tmux_cmd rename-window -t $session_name:1 'code'
 $tmux_cmd send-keys -t $session_name:1.1 C-m 'vim .' C-m
 
 $tmux_cmd split-window -h -p 40 -t $session_name:1.1
@@ -37,6 +37,10 @@ if [ -d .meteor ]; then
 fi
 if [ $meteor ]; then
   echo "* Detected Meteor project"
+  $tmux_cmd send-keys -t $session_name:1.2 "meteor test-packages --port 3010" C-m
+  $tmux_cmd split-window -v -p 80 -t $session_name:1.2
+  sleep 3 && open --background http://localhost:3010
+
   $tmux_cmd new-window -t $session_name -n 'web server'
   $tmux_cmd send-keys -t $session_name:2 "meteor" C-m
 
