@@ -28,29 +28,11 @@ $tmux_cmd send-keys -t $session_name:1.1 C-m 'vim .' C-m
 
 $tmux_cmd split-window -h -p 40 -t $session_name:1.1
 
-build=''
-if [ -e build ]; then
-  build=true
+if [ -s Makefile ] || [ -s makefile ]; then
+  echo '* Detected Make configuration'
+  $tmux_cmd send-keys -t $session_name:1.2 "rm -f .test-run; watch --color --interval=1 --no-title 'make .test-run >/dev/null 2>&1 && cat .test-run || make test'" C-m
+  $tmux_cmd split-window -v -p 94 -t $session_name:1.2
 fi
-if [ $build ]; then
-  echo '* Detected build script'
-  $tmux_cmd send-keys -t $session_name:1.2 'watch --color --no-title ./build' C-m
-else
-  $tmux_cmd send-keys -t $session_name:1.2 'watch --color --no-title ./build'
-fi
-$tmux_cmd split-window -v -p 94 -t $session_name:1.2
-
-run_tests=''
-if [ -e run-tests ]; then
-  run_tests=true
-fi
-if [ $run_tests ]; then
-  echo '* Detected run-tests script'
-  $tmux_cmd send-keys -t $session_name:1.3 'watch --color --no-title "echo \"...\" && ./run-tests | tail -16"' C-m
-else
-  $tmux_cmd send-keys -t $session_name:1.3 'watch --color --no-title "echo \"...\" && ./run-tests | tail -16"'
-fi
-$tmux_cmd split-window -v -p 70 -t $session_name:1.3
 
 $tmux_cmd select-window -t $session_name:1
 $tmux_cmd select-pane -t $session_name:1.1
