@@ -30,7 +30,7 @@ $tmux_cmd split-window -h -p 40 -t $session_name:1.1
 
 if [ -s Makefile ] || [ -s makefile ]; then
   echo '* Detected Make configuration'
-  $tmux_cmd send-keys -t $session_name:1.2 "rm -f .test-run; watch --color --differences --interval=1 --no-title 'make --question .test-run && cat .test-run || make test --silent'" C-m
+  $tmux_cmd send-keys -t $session_name:1.2 "rm -f .test-run; watch --color --differences --interval=1 --no-title 'make --question .test-run && cat .test-run && exit || rm -f .test-run; make test --always-make --silent &>/dev/null; cat .test-run'" C-m
   $tmux_cmd split-window -v -p 94 -t $session_name:1.2
 fi
 
