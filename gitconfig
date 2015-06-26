@@ -14,8 +14,9 @@
 	name = Nils Jonsson
 	email = nils@alumni.rice.edu
 [alias]
+	current-branch = rev-parse --abbrev-ref HEAD
 	lg = log --abbrev-commit --decorate --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
-  spring-cleaning = for-each-ref --format='%(refname:short) ... %(committerdate:short)' --sort=-committerdate
+	spring-cleaning = for-each-ref --format='%(refname:short) ... %(committerdate:short)' --sort=-committerdate
 [push]
 	default = simple
 [core]
