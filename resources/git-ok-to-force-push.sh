@@ -3,7 +3,7 @@
 set -o pipefail
 
 display_usage() {
-  printf "Usage: $(basename $0) [REMOTE] [BRANCH]\n"
+  printf "Usage: $(basename $0) [--verbose|-v] [REMOTE] [BRANCH]\n"
 }
 
 fetch_local_commit_hash() {
@@ -58,46 +58,57 @@ main() {
   fi
 
   if [ "$remote_commit_hash" == "$local_commit_hash" ]; then
-    printf "\033[32mOK\033[0m because \033[4m$remote\033[0m’s $remote_commit_hash == \033[4m$branch\033[0m’s\n"
+    printf "\033[32mOK\033[0m"
+    if [ "$VERBOSE" == 'true' ]; then
+      printf " because \033[4m$remote\033[0m’s $remote_commit_hash == \033[4m$branch\033[0m’s"
+    fi
+    printf "\n"
     exit 0
   else
-    printf "\033[31mFetch required\033[0m because \033[4m$remote\033[0m’s $remote_commit_hash != local $local_commit_hash\n"
+    printf "\033[31mFetch required\033[0m"
+    if [ "$VERBOSE" == 'true' ]; then
+      printf " because \033[4m$remote\033[0m’s $remote_commit_hash != local $local_commit_hash"
+    fi
+    printf "\n"
     exit 1
   fi
 }
 
 parse_arguments() {
-  case $# in
-    0)
-      remote=origin
-      branch=$(git rev-parse --abbrev-ref HEAD)
-      if [ "$branch" == 'HEAD' ]; then
-        printf "\033[31mNo branch appears to be checked out\033[0m\n" >&2
-        exit 4
-      fi
-      ;;
-    1)
-      remote=origin
-      branch="$1"
-      ;;
-    2)
-      remote="$1"
-      branch="$2"
-      ;;
-    *)
-      display_usage
-      exit -1
-      ;;
-  esac
-
   for argument in $@; do
     case "$argument" in
       --help | -h)
         display_usage
         exit 0
         ;;
+      --verbose | -v)
+        VERBOSE=true
+        ;;
+      *)
+        if [ "$branch" == '' ]; then
+          branch="$argument"
+        elif [ "$remote" == '' ]; then
+          remote="$branch"
+          branch="$argument"
+        else
+          display_usage
+          exit -1
+        fi
+        ;;
     esac
   done
+
+  if [ "$remote" == '' ]; then
+    remote=origin
+  fi
+
+  if [ "$branch" == '' ]; then
+    branch="$(git rev-parse --abbrev-ref HEAD)"
+    if [ "$branch" == 'HEAD' ]; then
+      printf "\033[31mNo branch appears to be checked out\033[0m\n" >&2
+      exit 4
+    fi
+  fi
 }
 
 main "$@"
