@@ -71,6 +71,10 @@ parse_arguments() {
     0)
       remote=origin
       branch=$(git rev-parse --abbrev-ref HEAD)
+      if [ "$branch" == 'HEAD' ]; then
+        printf "\033[31mNo branch appears to be checked out\033[0m\n" >&2
+        exit 4
+      fi
       ;;
     1)
       remote=origin
