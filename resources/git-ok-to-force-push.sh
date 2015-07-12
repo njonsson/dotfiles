@@ -3,7 +3,7 @@
 set -o pipefail
 
 display_usage() {
-  printf "Usage: $(basename $0) [--verbose|-v] [REMOTE] [BRANCH]\n"
+  printf "Usage: $(basename $0) [--help|-h] [--verbose|-v] [REMOTE] [BRANCH]\n"
 }
 
 fetch_local_commit_hash() {
