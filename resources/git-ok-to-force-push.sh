@@ -106,6 +106,15 @@ parse_arguments() {
     esac
   done
 
+  case $(printf "$VERBOSE" | tr '[:upper:]' '[:lower:]') in
+    t* | y* )
+      VERBOSE=true
+      ;;
+    *)
+      unset VERBOSE
+      ;;
+  esac
+
   if [ "$REMOTE" == '' ]; then
     REMOTE=origin
   fi
