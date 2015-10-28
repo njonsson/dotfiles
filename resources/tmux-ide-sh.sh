@@ -30,8 +30,24 @@ $tmux_cmd split-window -h -p 40 -t $session_name:1.1
 
 if [ -s Makefile ] || [ -s makefile ]; then
   echo '* Detected Make configuration'
-  $tmux_cmd send-keys -t $session_name:1.2 "rm -f .test-run; watch --color --differences --interval=1 --no-title 'make --question .test-run && cat .test-run && exit || rm -f .test-run; make test --always-make --silent &>/dev/null; cat .test-run'" C-m
-  $tmux_cmd split-window -v -p 94 -t $session_name:1.2
+  make_cmd="make test --always-make --silent"
+
+  fswatch=''
+  which fswatch >/dev/null
+  if [ $? = 0 ]; then
+    fswatch=true
+  fi
+
+  if [ $fswatch ]; then
+    echo "* Detected fswatch"
+    fswatch_cmd="fswatch -1 \`find . -type d -depth 1 -not -name '.*' -not -name '_*' -exec printf ' "{}"' \;\`"
+    make_cmd="while :; do; $make_cmd; $fswatch_cmd; done"
+  else
+    echo "* Running tests once -- install fswatch to run them continuously"
+  fi
+
+  $tmux_cmd send-keys -t $session_name:1.2 "$make_cmd" C-m
+  $tmux_cmd split-window -v -p 80 -t $session_name:1.2
 fi
 
 $tmux_cmd select-window -t $session_name:1
