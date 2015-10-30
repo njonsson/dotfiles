@@ -56,12 +56,12 @@ if [ $fswatch ]; then
   echo "* Detected fswatch"
   root_dirs=$(find . -type d -depth 1 -not -name '.*' -not -name '_*' -exec printf ' "{}"' \;)
   fswatch_cmd="fswatch -1$root_dirs"
-  mix_test_cmd="while :; do; grep -r 'IEx\\.pry'$root_dirs >/dev/null; if [ \$? -eq 0 ]; then; echo 'Debugging with IEx ...'; iex -S $mix_test_cmd; else; $mix_test_cmd; fi; $fswatch_cmd; done"
+  mix_test_cmd="while :; do; grep -r 'IEx\\.pry'$root_dirs >/dev/null; if [ \$? -eq 0 ]; then; printf \"\\e[1mBuilding/testing with IEx ...\\e[0m\\n\"; iex -S $mix_test_cmd; else; printf \"\\e[1mBuilding/testing ...\\e[0m\\n\"; $mix_test_cmd; fi; printf \"\\n\"; $fswatch_cmd; printf \"\\n\"; done"
 else
   echo "* Running tests/examples once -- install fswatch to run them continuously"
 fi
 
-$tmux_cmd send-keys -t $session_name:1.2 "$mix_test_cmd" C-m
+$tmux_cmd send-keys -t $session_name:1.2 "clear; $mix_test_cmd" C-m
 $tmux_cmd split-window -v -p 40 -t $session_name:1.2
 
 if [ -d lib ] && [ -d priv ] && [ -d web ]; then

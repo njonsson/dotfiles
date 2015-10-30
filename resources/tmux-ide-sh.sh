@@ -40,13 +40,13 @@ if [ -s Makefile ] || [ -s makefile ]; then
 
   if [ $fswatch ]; then
     echo "* Detected fswatch"
-    fswatch_cmd="fswatch -1 \`find . -type d -depth 1 -not -name '.*' -not -name '_*' -exec printf ' "{}"' \;\`"
-    make_cmd="while :; do; $make_cmd; $fswatch_cmd; done"
+    fswatch_cmd="fswatch -1\`find . -type d -depth 1 -not -name '.*' -not -name '_*' -exec printf ' "{}"' \;\`"
+    make_cmd="while :; do; printf \"\\e[1mBuilding/testing ...\\e[0m\\n\"; $make_cmd; printf \"\\n\"; $fswatch_cmd; printf \"\\n\"; done"
   else
     echo "* Running tests once -- install fswatch to run them continuously"
   fi
 
-  $tmux_cmd send-keys -t $session_name:1.2 "$make_cmd" C-m
+  $tmux_cmd send-keys -t $session_name:1.2 "clear; $make_cmd" C-m
   $tmux_cmd split-window -v -p 80 -t $session_name:1.2
 fi
 
