@@ -45,6 +45,10 @@ export GEM_OPEN_EDITOR="$EDITOR"
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 PATH=$PATH:/Library/Frameworks/AndroidDeveloperTools/sdk/platform-tools # Add Android SDK platform tools to PATH
 
+# Set up exenv.
+PATH=$PATH:$HOME/.exenv/bin
+eval "$(exenv init -)"
+
 if [ -s ~/.todo.markdown ]; then
   echo
   echo To-Do List
