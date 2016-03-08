@@ -36,3 +36,5 @@
 	trustExitCode = true
 [tag]
 	sort = version:refname
+[pull]
+	rebase = true
