@@ -56,7 +56,7 @@ if [ $fswatch ]; then
   echo "* Detected fswatch"
   root_dirs=$(find . -type d -depth 1 -not -name '.*' -not -name '_*' -exec printf ' "{}"' \;)
   fswatch_cmd="fswatch -1$root_dirs"
-  mix_test_cmd="while :; do; grep --extended-regexp --recursive 'IEx\.pry'$root_dirs >/dev/null; iex=\$?; grep --extended-regexp --recursive '^\s*f(it|describe|specify)'$root_dirs >/dev/null; focus=\$?; if [ \$iex -eq 0 -a \$focus -ne 0 ]; then; printf \"\\e[1mBuilding/testing with IEx ...\\e[0m\\n\"; iex -S $mix_test_cmd; elif [ \$iex -ne 0 -a \$focus -eq 0 ]; then; printf \"\\e[1mBuilding/testing focused ...\\e[0m\\n\"; $mix_test_cmd --focus; elif [ \$iex -eq 0 -a \$focus -eq 0 ]; then; printf \"\\e[1mBuilding/testing focused with IEx ...\\e[0m\\n\"; iex -S $mix_test_cmd --focus; else; printf \"\\e[1mBuilding/testing ...\\e[0m\\n\"; $mix_test_cmd; fi; printf \"\\n\"; $fswatch_cmd; printf \"\\n\"; done"
+  mix_test_cmd="while :; do; grep --extended-regexp --recursive 'IEx\.pry'$root_dirs >/dev/null; iex=\$?; grep --extended-regexp --recursive '^\s*f(it|describe|specify)' spec >/dev/null; focus=\$?; if [ \$iex -eq 0 -a \$focus -ne 0 ]; then; printf \"\\e[1mBuilding/testing with IEx ...\\e[0m\\n\"; iex -S $mix_test_cmd; elif [ \$iex -ne 0 -a \$focus -eq 0 ]; then; printf \"\\e[1mBuilding/testing focused ...\\e[0m\\n\"; $mix_test_cmd --focus; elif [ \$iex -eq 0 -a \$focus -eq 0 ]; then; printf \"\\e[1mBuilding/testing focused with IEx ...\\e[0m\\n\"; iex -S $mix_test_cmd --focus; else; printf \"\\e[1mBuilding/testing ...\\e[0m\\n\"; $mix_test_cmd; fi; printf \"\\n\"; $fswatch_cmd; printf \"\\n\"; done"
 else
   echo "* Running tests/examples once -- install fswatch to run them continuously"
 fi
