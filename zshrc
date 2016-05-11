@@ -50,10 +50,6 @@ PATH=$PATH:/Library/Frameworks/AndroidDeveloperTools/sdk/platform-tools # Add An
 PATH=$PATH:$HOME/.exenv/bin
 eval "$(exenv init -)"
 
-if [ -s ~/.todo.markdown ]; then
-  echo
-  echo To-Do List
-  echo ----------
-  cat ~/.todo.markdown
-  echo
-fi
+echo
+todo --list
+echo
