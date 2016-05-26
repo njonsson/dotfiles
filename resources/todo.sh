@@ -1,7 +1,7 @@
 #! /usr/bin/env sh
 
 function todo_add() {
-  echo "* $*" >>$(todo_file)
+  printf "* $*\n" >>$(todo_file)
 }
 
 function todo_edit() {
@@ -10,37 +10,44 @@ function todo_edit() {
 
 function todo_file() {
   if [ "$HOME/.todo.markdown" -nt "$HOME/.todo.md" ]; then
-    echo "$HOME/.todo.markdown"
+    printf "$HOME/.todo.markdown\n"
   else
-    echo "$HOME/.todo.md"
+    printf "$HOME/.todo.md\n"
   fi
 }
 
 function todo_help() {
   file=$(todo_file)
-  echo "A simple to-do list, stored in ${file/$HOME/~}"
-  echo
-  echo "  $(basename $0) Something to do   Adds \"Something to do\" to the to-do list"
-  echo
-  echo "  $(basename $0) --edit            Opens the to-do list in your editor"
-  echo "  $(basename $0) -e"
-  echo "  $(basename $0)"
-  echo
-  echo "  $(basename $0) --list            Lists to-do items"
-  echo "  $(basename $0) -l"
-  echo
-  echo "  $(basename $0) --help            Displays this help message"
-  echo "  $(basename $0) -h"
+  printf "A simple to-do list, stored in ${file/$HOME/~}\n\n"
+
+  printf "  $(basename $0) Something to do   Adds \"Something to do\" to the to-do list\n\n"
+
+  printf "  $(basename $0) --edit            Opens the to-do list in your editor\n"
+  printf "  $(basename $0) -e\n"
+  printf "  $(basename $0)\n\n"
+
+  printf "  $(basename $0) --list            Lists to-do items\n"
+  printf "  $(basename $0) -l\n\n"
+
+  printf "  $(basename $0) --open            Opens the to-do list in the application associated with \e[4m$(todo_file)\e[24m\n"
+  printf "  $(basename $0) -o\n\n"
+
+  printf "  $(basename $0) --help            Displays this help message\n"
+  printf "  $(basename $0) -h\n"
 }
 
 function todo_list() {
   if [ -f $(todo_file) ]; then
-    echo To-do list
-    echo ----------
+    printf "To-do list\n"
+    echo   -----------
     cat "$(todo_file)"
   else
-    echo Nothing in the to-do list
+    printf "Nothing in the to-do list\n"
   fi
+}
+
+function todo_open() {
+  open "$(todo_file)"
 }
 
 case "$*" in
@@ -52,6 +59,9 @@ case "$*" in
     ;;
   --list | -l )
     todo_list
+    ;;
+  --open | -o )
+    todo_open
     ;;
   * )
     todo_add "$*"
