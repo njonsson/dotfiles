@@ -1,14 +1,14 @@
 #! /usr/bin/env sh
 
-function todo_add() {
+todo_add() {
   printf "* $*\n" >>$(todo_file)
 }
 
-function todo_edit() {
+todo_edit() {
   $EDITOR $(todo_file)
 }
 
-function todo_file() {
+todo_file() {
   if [ "$HOME/.todo.markdown" -nt "$HOME/.todo.md" ]; then
     printf "$HOME/.todo.markdown\n"
   else
@@ -16,7 +16,7 @@ function todo_file() {
   fi
 }
 
-function todo_help() {
+todo_help() {
   file=$(todo_file)
   printf "A simple to-do list, stored in ${file/$HOME/~}\n\n"
 
@@ -36,7 +36,7 @@ function todo_help() {
   printf "  $(basename $0) -h\n"
 }
 
-function todo_list() {
+todo_list() {
   if [ -f $(todo_file) ]; then
     printf "To-do list\n"
     echo   -----------
@@ -46,7 +46,7 @@ function todo_list() {
   fi
 }
 
-function todo_open() {
+todo_open() {
   open "$(todo_file)"
 }
 
