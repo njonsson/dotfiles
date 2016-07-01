@@ -17,7 +17,7 @@
 	current-branch = rev-parse --abbrev-ref HEAD
 	lg = log --abbrev-commit --decorate --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
 	spring-cleaning = for-each-ref --format='%(refname:short) ... %(committerdate:short)' --sort=-committerdate
-	touch = "!git commit --amend --date=\"`date`\""
+	touch = "!git commit --amend --date=\"`date`\" --no-edit"
 	watch = "!clear;fswatch --exclude .git . | \
 	  while read file; do                      \
 	    clear;                                 \
