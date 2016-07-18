@@ -35,7 +35,7 @@ perform() {
   if [[ $result -eq 0 ]]; then
     echo -e "\033[32mOK\033[0m"
   else
-    echo -e "\033[31mERROR!\033[0m"
+    echo -e "\033[31merror!\033[0m"
     echo -e "$output" >&2
     exit $result
   fi
@@ -48,7 +48,7 @@ perform_discarding_stderr() {
   if [[ $result -eq 0 ]]; then
     echo -e "\033[32mOK\033[0m"
   else
-    echo -e "\033[31mERROR!\033[0m"
+    echo -e "\033[31merror!\033[0m"
     echo -e "$output" >&2
     exit $result
   fi
@@ -75,10 +75,10 @@ diff <(git merge-base $REMOTE/$BRANCH_UPSTREAM $REMOTE/$BRANCH_DOWNSTREAM) \
      <(git ls-remote $REMOTE $BRANCH_UPSTREAM 2>/dev/null | cut -f 1)      \
      &>/dev/null
 if [[ $? -eq 0 ]]; then
-  echo -e "\033[32mYES\033[0m"
+  echo -e "\033[32myes\033[0m"
   exit 0
 else
-  echo -e "\033[31mNO\033[0m"
+  echo -e "\033[31mno\033[0m"
 fi
 
 announce "Ensuring working tree is clean"

@@ -22,7 +22,7 @@ perform() {
   if [[ $result -eq 0 ]]; then
     echo -e "\033[32mOK\033[0m"
   else
-    echo -e "\033[31mERROR!\033[0m"
+    echo -e "\033[31merror!\033[0m"
     echo -e "$output" >&2
     exit $result
   fi
