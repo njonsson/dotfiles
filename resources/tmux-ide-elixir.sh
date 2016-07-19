@@ -20,6 +20,7 @@ esac
 echo Setting up tmux IDE for Elixir
 
 session_name=`basename $(pwd)`
+RUN_TESTS_SCRIPT=/tmp/$me-run-tests-for-$session_name
 tmux_cmd="tmux -S /var/tmux/$session_name"
 $tmux_cmd new-session -s $session_name -d
 
@@ -52,17 +53,43 @@ if [ $? = 0 ]; then
   fswatch=true
 fi
 
+cat /dev/null >$RUN_TESTS_SCRIPT
 if [ $fswatch ]; then
   echo "* Detected fswatch"
   root_dirs=$(find . -type d -depth 1 -not -name '.*' -not -name '_*' -exec printf ' "{}"' \;)
   spec_dirs=$(find . -type d -name spec -exec printf ' "{}"' \;)
   fswatch_cmd="fswatch -1$root_dirs"
-  mix_test_cmd="while :; do; grep --extended-regexp --recursive '^[^#]*(:debugger|IEx\.pry)'$root_dirs >/dev/null; iex=\$?; grep --extended-regexp --recursive '^[^#]*f(it|describe|specify)'$spec_dirs >/dev/null; focus=\$?; if [ \$iex -eq 0 -a \$focus -ne 0 ]; then; printf \"\\e[1mBuilding/testing with IEx ...\\e[0m\\n\"; iex -S $mix_test_cmd; elif [ \$iex -ne 0 -a \$focus -eq 0 ]; then; printf \"\\e[1mBuilding/testing focused ...\\e[0m\\n\"; $mix_test_cmd --focus; elif [ \$iex -eq 0 -a \$focus -eq 0 ]; then; printf \"\\e[1mBuilding/testing focused with IEx ...\\e[0m\\n\"; iex -S $mix_test_cmd --focus; else; printf \"\\e[1mBuilding/testing ...\\e[0m\\n\"; $mix_test_cmd; fi; printf \"\\n\"; $fswatch_cmd; printf \"\\n\"; done"
+  echo "while :; do"                                                                                         >>$RUN_TESTS_SCRIPT
+  echo "  grep --extended-regexp --recursive '^[^#]*([[:space:]]:debugger|IEx\\.pry)'$root_dirs >/dev/null"  >>$RUN_TESTS_SCRIPT
+  echo "  iex=\$?"                                                                                           >>$RUN_TESTS_SCRIPT
+  echo "  grep --extended-regexp --recursive '^[^#]*[[:space:]]f(it|describe|specify)'$spec_dirs >/dev/null" >>$RUN_TESTS_SCRIPT
+  echo "  focus=\$?"                                                                                         >>$RUN_TESTS_SCRIPT
+  echo "  if [ \$iex -eq 0 -a \$focus -ne 0 ]; then"                                                         >>$RUN_TESTS_SCRIPT
+  echo "    printf \"\\e[1mBuilding/testing with IEx ...\\e[0m\\\n\""                                        >>$RUN_TESTS_SCRIPT
+  echo "    iex -S $mix_test_cmd"                                                                            >>$RUN_TESTS_SCRIPT
+  echo "  elif [ \$iex -ne 0 -a \$focus -eq 0 ]; then"                                                       >>$RUN_TESTS_SCRIPT
+  echo "    printf \"\\e[1mBuilding/testing focused ...\\e[0m\\\n\""                                         >>$RUN_TESTS_SCRIPT
+  echo "    $mix_test_cmd --focus"                                                                           >>$RUN_TESTS_SCRIPT
+  echo "  elif [ \$iex -eq 0 -a \$focus -eq 0 ]; then"                                                       >>$RUN_TESTS_SCRIPT
+  echo "    printf \"\\e[1mBuilding/testing focused with IEx ...\\e[0m\\\n\""                                >>$RUN_TESTS_SCRIPT
+  echo "    iex -S $mix_test_cmd --focus"                                                                    >>$RUN_TESTS_SCRIPT
+  echo "  else"                                                                                              >>$RUN_TESTS_SCRIPT
+  echo "    printf \"\\e[1mBuilding/testing ...\\e[0m\\\n\""                                                 >>$RUN_TESTS_SCRIPT
+  echo "    $mix_test_cmd"                                                                                   >>$RUN_TESTS_SCRIPT
+  echo "  fi"                                                                                                >>$RUN_TESTS_SCRIPT
+  echo "  printf \"\\\n\""                                                                                   >>$RUN_TESTS_SCRIPT
+  echo "  $fswatch_cmd"                                                                                      >>$RUN_TESTS_SCRIPT
+  echo "  printf \"\\\n\""                                                                                   >>$RUN_TESTS_SCRIPT
+  echo "done"                                                                                                >>$RUN_TESTS_SCRIPT
 else
   echo "* Running tests/examples once -- install fswatch to run them continuously"
+  echo "$mix_test_cmd" >>$RUN_TESTS_SCRIPT
 fi
+chmod u+x $RUN_TESTS_SCRIPT
 
-$tmux_cmd send-keys -t $session_name:1.2 "clear; $mix_test_cmd" C-m
+$tmux_cmd send-keys -t $session_name:1.2 "clear; $RUN_TESTS_SCRIPT" C-m
+sleep 1
+rm $RUN_TESTS_SCRIPT
 $tmux_cmd split-window -v -p 40 -t $session_name:1.2
 
 if [ -d lib ] && [ -d priv ] && [ -d web ]; then
