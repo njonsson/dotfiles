@@ -89,8 +89,7 @@ fi
 chmod u+x $RUN_TESTS_SCRIPT
 
 $tmux_cmd send-keys -t $session_name:1.2 "clear; $RUN_TESTS_SCRIPT" C-m
-sleep 1
-rm $RUN_TESTS_SCRIPT
+
 $tmux_cmd split-window -v -p 40 -t $session_name:1.2
 
 if [ -d lib ] && [ -d priv ] && [ -d web ]; then
