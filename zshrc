@@ -43,12 +43,11 @@ export GEM_OPEN_EDITOR="$EDITOR"
 [[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-PATH=$PATH:$HOME/.exenv/bin # Add ExEnv to PATH for scripting
 PATH=$PATH:/Library/Frameworks/AndroidDeveloperTools/sdk/platform-tools # Add Android SDK platform tools to PATH
 
-# Set up exenv.
-PATH=$PATH:$HOME/.exenv/bin
-eval "$(exenv init -)"
+# Set up asdf for tool version management.
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
 
 echo
 todo --list
