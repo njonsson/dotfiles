@@ -37,7 +37,7 @@ todo_help() {
 }
 
 todo_list() {
-  if [ -f $(todo_file) ]; then
+  if [ -s $(todo_file) ]; then
     printf "To-do list\n"
     echo   -----------
     cat "$(todo_file)"
