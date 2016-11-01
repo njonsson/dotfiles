@@ -8,6 +8,15 @@ todo_edit() {
   $EDITOR $(todo_file)
 }
 
+todo_exit_with_number_of_items() {
+  file="$(todo_file)"
+  if [ -s $file ]; then
+    exit $(wc -l $file | awk '{ print $1 }')
+  else
+    exit 0
+  fi
+}
+
 todo_file() {
   if [ "$HOME/.todo.markdown" -nt "$HOME/.todo.md" ]; then
     printf "$HOME/.todo.markdown\n"
@@ -68,3 +77,4 @@ case "$*" in
     todo_list
     ;;
 esac
+todo_exit_with_number_of_items
