@@ -35,6 +35,7 @@ alias rake='noglob rake'
 alias rspec='nocorrect rspec'
 alias tmux='nocorrect tmux'
 alias tree='nocorrect tree'
+alias watch='watch --color --diff'
 
 export PATH="$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH"
 export EDITOR="/usr/bin/env vim"
