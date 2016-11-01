@@ -10,7 +10,7 @@ todo_edit() {
 
 todo_exit_with_number_of_items() {
   file="$(todo_file)"
-  if [ -s $file ]; then
+  if [ -s "$file" ]; then
     exit $(wc -l $file | awk '{ print $1 }')
   else
     exit 0
@@ -46,9 +46,14 @@ todo_help() {
 }
 
 todo_list() {
-  if [ -s $(todo_file) ]; then
-    printf "To-do list\n"
-    echo    ----------
+  if [ -s "$(todo_file)" ]; then
+    title="To-do list"
+    title_length=${#title}
+    printf "\e[4m\e[1m$title\e[22m"
+    for i in $(seq 1 $(($(tput cols) - $title_length))); do
+      printf " "
+    done
+    printf "\e[24m\n"
     cat "$(todo_file)"
   # else
   #   printf "Nothing in the to-do list\n"
