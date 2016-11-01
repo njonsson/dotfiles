@@ -48,7 +48,7 @@ todo_help() {
 todo_list() {
   if [ -s $(todo_file) ]; then
     printf "To-do list\n"
-    echo   -----------
+    echo    ----------
     cat "$(todo_file)"
   else
     printf "Nothing in the to-do list\n"
