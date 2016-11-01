@@ -50,8 +50,8 @@ todo_list() {
     printf "To-do list\n"
     echo    ----------
     cat "$(todo_file)"
-  else
-    printf "Nothing in the to-do list\n"
+  # else
+  #   printf "Nothing in the to-do list\n"
   fi
 }
 
