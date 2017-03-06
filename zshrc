@@ -40,6 +40,8 @@ alias watch='watch --color --diff'
 export PATH="$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH"
 export EDITOR="/usr/bin/env vim"
 export GEM_OPEN_EDITOR="$EDITOR"
+export GOPATH="$HOME/golang"
+export PATH="$GOPATH/bin:$PATH"
 
 [[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
 
