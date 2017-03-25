@@ -106,7 +106,7 @@ if [ -d lib ] && [ -d priv ] && [ -d web ]; then
   $tmux_cmd send-keys -t $session_name:3 "iex -S mix" C-m
 else
   $tmux_cmd new-window -t $session_name -n REPL
-  $tmux_cmd send-keys -t $session_name:2 iex C-m
+  $tmux_cmd send-keys -t $session_name:2 "iex -S mix" C-m
 fi
 
 $tmux_cmd select-window -t $session_name:1
