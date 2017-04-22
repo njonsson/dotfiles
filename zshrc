@@ -49,6 +49,8 @@ PATH=$PATH:/Library/Frameworks/AndroidDeveloperTools/sdk/platform-tools # Add An
 . $HOME/.asdf/asdf.sh
 . $HOME/.asdf/completions/asdf.bash
 
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
 [[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
 
 echo
