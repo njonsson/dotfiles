@@ -43,14 +43,13 @@ export GEM_OPEN_EDITOR="$EDITOR"
 export GOPATH="$HOME/golang"
 export PATH="$GOPATH/bin:$PATH"
 
-[[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
-
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 PATH=$PATH:/Library/Frameworks/AndroidDeveloperTools/sdk/platform-tools # Add Android SDK platform tools to PATH
 
 # Set up asdf for tool version management.
 . $HOME/.asdf/asdf.sh
 . $HOME/.asdf/completions/asdf.bash
+
+[[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
 
 echo
 todo --list
