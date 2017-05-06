@@ -6,8 +6,10 @@
 	algorithm = patience
 	mnemonicprefix = true
 	renames = copies
+	tool = diffmerge
 [merge]
 	stat = true
+	tool = diffmerge
 [rerere]
 	enabled = true
 [user]
@@ -29,11 +31,10 @@
 	default = simple
 [core]
 	excludesfile = /Users/nils/.gitignore_global
-[difftool "sourcetree"]
-	cmd = /Applications/DiffMerge.app/Contents/MacOS/DiffMerge --nosplash \"$LOCAL\" \"$REMOTE\"
-	path = 
-[mergetool "sourcetree"]
-	cmd = /Applications/DiffMerge.app/Contents/MacOS/DiffMerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$BASE\" \"$REMOTE\"
+[difftool "diffmerge"]
+	cmd = diffmerge \"$LOCAL\" \"$REMOTE\"
+[mergetool "diffmerge"]
+	cmd = "diffmerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$(if test -f \"$BASE\"; then echo \"$BASE\"; else echo \"$LOCAL\"; fi)\" \"$REMOTE\""
 	trustExitCode = true
 [tag]
 	sort = version:refname
