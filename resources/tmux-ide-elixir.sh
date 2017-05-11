@@ -44,6 +44,7 @@ if [ "$espec_files_count" -lt "$exunit_files_count" ]; then
   mix_test_cmd="mix test"
 else
   echo "* Detected ESpec examples"
+  espec=1
   mix_test_cmd="mix espec"
 fi
 
@@ -58,26 +59,30 @@ if [ $fswatch ]; then
   echo "* Detected fswatch"
   root_dirs=$(find . -type d -depth 1 -not -name '.*' -not -name '_*' -exec printf ' "{}"' \;)
   spec_dirs=$(find . -type d -name spec -exec printf ' "{}"' \;)
+  test_dirs=$(find . -type d -name test -exec printf ' "{}"' \;)
   fswatch_cmd="fswatch -1$root_dirs"
   grep_include_opts="--include='*.ex' --include='*.exs'"
   echo "while :; do"                                                                                                              >>$RUN_TESTS_SCRIPT
   echo "  grep --extended-regexp $grep_include_opts --recursive '^[^#]*([[:space:]]:debugger|IEx\\.pry)'$root_dirs >/dev/null"    >>$RUN_TESTS_SCRIPT
   echo "  iex=\$?"                                                                                                                >>$RUN_TESTS_SCRIPT
-  echo "  if [ -z \"$spec_dirs\" ]; then"                                                                                         >>$RUN_TESTS_SCRIPT
-  echo "    focus=1"                                                                                                              >>$RUN_TESTS_SCRIPT
+  echo "  if [ -z '$espec' ]; then"                                                                                               >>$RUN_TESTS_SCRIPT
+  echo "    grep --extended-regexp $grep_include_opts --recursive '^[^#]*[[:space:]]@tag +[^#]*:focus'$test_dirs >/dev/null"      >>$RUN_TESTS_SCRIPT
+  echo "    focus=\$?"                                                                                                            >>$RUN_TESTS_SCRIPT
+  echo "    focus_option='--only focus'"                                                                                          >>$RUN_TESTS_SCRIPT
   echo "  else"                                                                                                                   >>$RUN_TESTS_SCRIPT
   echo "    grep --extended-regexp $grep_include_opts --recursive '^[^#]*[[:space:]]f(it|describe|specify)'$spec_dirs >/dev/null" >>$RUN_TESTS_SCRIPT
   echo "    focus=\$?"                                                                                                            >>$RUN_TESTS_SCRIPT
+  echo "    focus_option='--focus'"                                                                                               >>$RUN_TESTS_SCRIPT
   echo "  fi"                                                                                                                     >>$RUN_TESTS_SCRIPT
   echo "  if [ \$iex -eq 0 -a \$focus -ne 0 ]; then"                                                                              >>$RUN_TESTS_SCRIPT
   echo "    printf \"\\e[1mBuilding/testing with IEx ...\\e[0m\\\n\""                                                             >>$RUN_TESTS_SCRIPT
   echo "    iex -S $mix_test_cmd"                                                                                                 >>$RUN_TESTS_SCRIPT
   echo "  elif [ \$iex -ne 0 -a \$focus -eq 0 ]; then"                                                                            >>$RUN_TESTS_SCRIPT
   echo "    printf \"\\e[1mBuilding/testing focused ...\\e[0m\\\n\""                                                              >>$RUN_TESTS_SCRIPT
-  echo "    $mix_test_cmd --focus"                                                                                                >>$RUN_TESTS_SCRIPT
+  echo "    $mix_test_cmd \$focus_option"                                                                                         >>$RUN_TESTS_SCRIPT
   echo "  elif [ \$iex -eq 0 -a \$focus -eq 0 ]; then"                                                                            >>$RUN_TESTS_SCRIPT
   echo "    printf \"\\e[1mBuilding/testing focused with IEx ...\\e[0m\\\n\""                                                     >>$RUN_TESTS_SCRIPT
-  echo "    iex -S $mix_test_cmd --focus"                                                                                         >>$RUN_TESTS_SCRIPT
+  echo "    iex -S $mix_test_cmd \$focus_option"                                                                                  >>$RUN_TESTS_SCRIPT
   echo "  else"                                                                                                                   >>$RUN_TESTS_SCRIPT
   echo "    printf \"\\e[1mBuilding/testing ...\\e[0m\\\n\""                                                                      >>$RUN_TESTS_SCRIPT
   echo "    $mix_test_cmd"                                                                                                        >>$RUN_TESTS_SCRIPT
