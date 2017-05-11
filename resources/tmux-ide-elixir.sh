@@ -40,10 +40,10 @@ else
   exunit_files_count=0
 fi
 if [ "$espec_files_count" -lt "$exunit_files_count" ]; then
-  echo "* Detected no ESpec examples so running ExUnit tests instead"
+  echo "* Detected more ExUnit tests than ESpec examples"
   mix_test_cmd="mix test"
 else
-  echo "* Detected ESpec examples"
+  echo "* Detected at least as many ESpec examples as ExUnit tests"
   espec=1
   mix_test_cmd="mix espec"
 fi
