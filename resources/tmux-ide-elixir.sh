@@ -76,13 +76,13 @@ if [ $fswatch ]; then
   echo "  fi"                                                                                                                     >>$RUN_TESTS_SCRIPT
   echo "  if [ \$iex -eq 0 -a \$focus -ne 0 ]; then"                                                                              >>$RUN_TESTS_SCRIPT
   echo "    printf \"\\e[1mBuilding/testing with IEx ...\\e[0m\\\n\""                                                             >>$RUN_TESTS_SCRIPT
-  echo "    iex -S $mix_test_cmd"                                                                                                 >>$RUN_TESTS_SCRIPT
+  echo "    iex -S $mix_test_cmd --trace"                                                                                         >>$RUN_TESTS_SCRIPT
   echo "  elif [ \$iex -ne 0 -a \$focus -eq 0 ]; then"                                                                            >>$RUN_TESTS_SCRIPT
   echo "    printf \"\\e[1mBuilding/testing focused ...\\e[0m\\\n\""                                                              >>$RUN_TESTS_SCRIPT
   echo "    $mix_test_cmd \$focus_option"                                                                                         >>$RUN_TESTS_SCRIPT
   echo "  elif [ \$iex -eq 0 -a \$focus -eq 0 ]; then"                                                                            >>$RUN_TESTS_SCRIPT
   echo "    printf \"\\e[1mBuilding/testing focused with IEx ...\\e[0m\\\n\""                                                     >>$RUN_TESTS_SCRIPT
-  echo "    iex -S $mix_test_cmd \$focus_option"                                                                                  >>$RUN_TESTS_SCRIPT
+  echo "    iex -S $mix_test_cmd --trace \$focus_option"                                                                          >>$RUN_TESTS_SCRIPT
   echo "  else"                                                                                                                   >>$RUN_TESTS_SCRIPT
   echo "    printf \"\\e[1mBuilding/testing ...\\e[0m\\\n\""                                                                      >>$RUN_TESTS_SCRIPT
   echo "    $mix_test_cmd"                                                                                                        >>$RUN_TESTS_SCRIPT
