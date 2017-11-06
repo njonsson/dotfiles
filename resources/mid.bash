@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 function die {
-  message=$1
-  printf "%s" $message >&2
-  status=$2
+  message="$1"
+  printf "%s" "$message" >&2
+  status="$2"
   exit $status || 1
 }
 
@@ -18,81 +18,133 @@ function main {
 }
 
 function parse_arguments {
-  if [ -t 0 ]; then
-    if [ "$#" -eq 2 ] && [ -f "$2" ]; then
-      # Input comes from a specified filename.
-      file="$2"
-      lines_opt="$1"
-    else
-      print_usage_and_die
-    fi
-  else
-    # Input comes from a stream.
-    if [ "$#" -eq 1 ]; then
-      file=""
-      lines_opt="$1"
-    else
-      print_usage_and_die
-    fi
-  fi
+  for argument in $@; do
+    case "$argument" in
+      -[0-9]*)
+        num_opt="${argument/-/}"
+        expecting_lines_opt=""
+        expecting_bytes_opt=""
+        num_type=line
+        ;;
+      -n)
+        expecting_lines_opt=true
+        expecting_bytes_opt=""
+        ;;
+      -c)
+        expecting_bytes_opt=true
+        expecting_lines_opt=""
+        ;;
+      [0-9]*)
+        if [ "$expecting_lines_opt" == true ]; then
+          num_opt="$argument"
+          num_type=line
+        elif [ "$expecting_bytes_opt" == true ]; then
+          num_opt="$argument"
+          num_type=byte
+        elif [ -t 0 ] && [ -z "$file" ] && [ -f "$argument" ]; then
+          file="$argument"
+        else
+          print_usage_and_die
+        fi
+        expecting_lines_opt=""
+        expecting_bytes_opt=""
+        ;;
+      *)
+        if [ -t 0 ] && [ -z "$file" ] && [ -f "$argument" ]; then
+          file="$argument"
+        else
+          print_usage_and_die
+        fi
+        expecting_lines_opt=""
+        expecting_bytes_opt=""
+        ;;
+    esac
+  done
 
-  line1="${lines_opt/-/}"
-  line1="${line1/,*/}"
-
-  line2="${lines_opt/-/}"
-  line2="${line2/*,/}"
-  if [ -z "$line2" ]; then
-    line2=$line1
-  fi
-
-  if [ $line2 -lt $line1 ]; then
+  if [ -t 0 ] && [ -z "$file" ]; then
+    print_usage_and_die
+  elif [ -z "$num_opt" ]; then
     print_usage_and_die
   fi
+
+  num1="${num_opt/,*/}"
+  num2="${num_opt/*,/}"
+  if [ -z "$num2" ]; then
+    num2="$num1"
+  fi
+  if ! [ -z "$num1" ] && ! [ -z "$num2" ] && [ $num2 -lt $num1 ]; then
+    print_usage_and_die
+  fi
+
+  if ! [ -z "$num1" ] && [ -z "$num_type" ]; then
+    print_usage_and_die
+  fi
+
+  case "$num_type" in
+    line)
+      head_and_tail_opts="-n"
+      printf_suffix="\n"
+      read_opts=""
+      wc_opts="-l"
+      ;;
+    byte)
+      head_and_tail_opts="-c"
+      printf_suffix=""
+      read_opts="-n 1 -d \"\0\""
+      wc_opts="-c"
+      ;;
+    *)
+      die "Expected \$num_type to be 'line' or 'byte'\n" 2
+  esac
 }
 
 function print_usage_and_die {
   script="$(basename "$0")"
   printf "Usage:\n"
-  printf "       \e[1m$script\e[22m -\e[4mline\e[24m        \e[4mfile\e[24m\n"            >&2
-  printf "       \e[1m$script\e[22m -\e[4mline1\e[24m,\e[4mline2\e[24m \e[4mfile\e[24m\n" >&2
+  printf "       \e[1m$script\e[22m -\e[4mline\e[24m          \e[4mfile\e[24m\n"            >&2
+  printf "       \e[1m$script\e[22m -\e[4mline1\e[24m,\e[4mline2\e[24m   \e[4mfile\e[24m\n" >&2
+  printf "       \e[1m$script\e[22m -n \e[4mline\e[24m        \e[4mfile\e[24m\n"            >&2
+  printf "       \e[1m$script\e[22m -n \e[4mline1\e[24m,\e[4mline2\e[24m \e[4mfile\e[24m\n" >&2
+  printf "       \e[1m$script\e[22m -c \e[4mbyte\e[24m        \e[4mfile\e[24m\n"            >&2
+  printf "       \e[1m$script\e[22m -c \e[4mbyte1\e[24m,\e[4mbyte2\e[24m \e[4mfile\e[24m\n" >&2
   die
 }
 
 function process_file {
-  if [ $line1 -eq 1 ]; then
-    head -$line2 "$file"
+  if [ $num1 -eq 1 ]; then
+    head -$num2 "$file"
   else
-    lines_in_file=$(($(wc -l <"$file")))
-    if [ $line1 -le $lines_in_file ]; then
-      if [ $line2 -lt $lines_in_file ]; then
-        if [ $((line2 * 2)) -lt $((lines_in_file + line2 - line1 + 1)) ]; then
-          head_lines=$line2
-          tail_lines=$((line2 - line1 + 1))
-          head -$head_lines "$file" | tail -$tail_lines
+    file_size=$(($(wc $wc_opts <"$file")))
+    if [ $num1 -le $file_size ]; then
+      if [ $num2 -lt $file_size ]; then
+        if [ $((num2 * 2)) -lt $((file_size + num2 - num1 + 1)) ]; then
+          head_size=$num2
+          tail_size=$((num2 - num1 + 1))
+          head $head_and_tail_opts $head_size "$file" | tail $head_and_tail_opts $tail_size
         else
-          tail_lines=$((lines_in_file - line1 + 1))
-          head_lines=$((line2 - line1 + 1))
-          tail -$tail_lines "$file" | head -$head_lines
+          tail_size=$((file_size - num1 + 1))
+          head_size=$((num2 - num1 + 1))
+          tail $head_and_tail_opts $tail_size "$file" | head $head_and_tail_opts $head_size
         fi
       else
-        tail_lines=$((lines_in_file - line1 + 1))
-        tail -$tail_lines "$file"
+        tail_size=$((file_size - num1 + 1))
+        tail $head_and_tail_opts $tail_size "$file"
       fi
     fi
   fi
 }
 
 function process_stream {
-  if [ $line1 -eq 1 ]; then
-    head -$line2
+  if [ $num1 -eq 1 ]; then
+    head $head_and_tail_opts $num2
   else
-    lines_read=1
-    while read -r && [ $lines_read -le $line2 ]; do
-      line="$REPLY"
-      if [ $line1 -le $lines_read ]; then
-        printf "%s\n" "$line"
+    total_read=1
+    while read $read_opts -r && [ $total_read -le $num2 ]; do
+      read_value="$REPLY"
+      if [ $num1 -le $total_read ]; then
+        printf "%s$printf_suffix" "$read_value"
       fi
-      lines_read=$((lines_read + 1))
+      total_read=$((total_read + 1))
     done
   fi
 }
