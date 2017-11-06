@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+function die {
+  message=$1
+  printf "%s" $message >&2
+  status=$2
+  exit $status || 1
+}
+
 function main {
   parse_arguments $@
 
@@ -17,7 +24,7 @@ function parse_arguments {
       file="$2"
       lines_opt="$1"
     else
-      print_usage_and_exit
+      print_usage_and_die
     fi
   else
     # Input comes from a stream.
@@ -25,7 +32,7 @@ function parse_arguments {
       file=""
       lines_opt="$1"
     else
-      print_usage_and_exit
+      print_usage_and_die
     fi
   fi
 
@@ -39,16 +46,16 @@ function parse_arguments {
   fi
 
   if [ $line2 -lt $line1 ]; then
-    print_usage_and_exit
+    print_usage_and_die
   fi
 }
 
-function print_usage_and_exit {
+function print_usage_and_die {
   script="$(basename "$0")"
   printf "Usage:\n"
   printf "       \e[1m$script\e[22m -\e[4mline\e[24m        \e[4mfile\e[24m\n"            >&2
   printf "       \e[1m$script\e[22m -\e[4mline1\e[24m,\e[4mline2\e[24m \e[4mfile\e[24m\n" >&2
-  exit 1
+  die
 }
 
 function process_file {
