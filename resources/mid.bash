@@ -14,8 +14,8 @@ function parse_arguments {
   if [ -t 0 ]; then
     if [ "$#" -eq 2 ] && [ -f "$2" ]; then
       # Input comes from a specified filename.
-      file=$2
-      lines_opt=$1
+      file="$2"
+      lines_opt="$1"
     else
       print_usage_and_exit
     fi
@@ -23,17 +23,17 @@ function parse_arguments {
     # Input comes from a stream.
     if [ "$#" -eq 1 ]; then
       file=""
-      lines_opt=$1
+      lines_opt="$1"
     else
       print_usage_and_exit
     fi
   fi
 
-  line1=${lines_opt/-/}
-  line1=${line1/,*/}
+  line1="${lines_opt/-/}"
+  line1="${line1/,*/}"
 
-  line2=${lines_opt/-/}
-  line2=${line2/*,/}
+  line2="${lines_opt/-/}"
+  line2="${line2/*,/}"
   if [ -z "$line2" ]; then
     line2=$line1
   fi
@@ -44,7 +44,7 @@ function parse_arguments {
 }
 
 function print_usage_and_exit {
-  script=$(basename "$0")
+  script="$(basename "$0")"
   printf "Usage:\n"
   printf "       \e[1m$script\e[22m -\e[4mline\e[24m        \e[4mfile\e[24m\n"            >&2
   printf "       \e[1m$script\e[22m -\e[4mline1\e[24m,\e[4mline2\e[24m \e[4mfile\e[24m\n" >&2
@@ -80,7 +80,8 @@ function process_stream {
     head -$line2
   else
     lines_read=1
-    while read line && [ $lines_read -le $line2 ]; do
+    while read -r && [ $lines_read -le $line2 ]; do
+      line="$REPLY"
       if [ $line1 -le $lines_read ]; then
         printf "%s\n" "$line"
       fi
