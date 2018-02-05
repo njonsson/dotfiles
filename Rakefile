@@ -155,6 +155,12 @@ namespace :set_up do
         "#{TARGET_DIR_DOTFILES}/.#{source_basename}"
       end
     end
+
+    target_dir = "#{ENV['HOME']}/.config"
+    fail unless system("mkdir -p #{target_dir}")
+    generate_or_symlink File.expand_path('../nvim', __FILE__) do |source|
+      "#{target_dir}/#{File.basename source}"
+    end
   end
 
   namespace :dotfiles do
