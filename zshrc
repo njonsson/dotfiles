@@ -48,6 +48,7 @@ setopt HIST_VERIFY               # Don't execute immediately upon history expans
 setopt HIST_BEEP                 # Beep when accessing nonexistent history.
 
 alias git='noglob git'
+alias vim='nvim'
 alias rake='noglob rake'
 alias rspec='nocorrect rspec'
 alias tmux='nocorrect tmux'
