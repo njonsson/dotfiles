@@ -1,0 +1,222 @@
+snippet def "defines a new function with a multiline block" !b
+def ${1:name}(${2:params}) do
+  $3
+end
+endsnippet
+
+snippet defl "defines a new function" !b
+def ${1:name}(${2:params}), do: $3
+endsnippet
+
+snippet defp "defines a private method with a multiline block" !b
+defp ${1:name}(${2:params}) do
+  $3
+end
+endsnippet
+
+snippet defpl "defines a new private function" !b
+defp ${1:name}(${2:params}), do: $3
+endsnippet
+
+snippet defc "defines a behavior callback" !b
+defcallback ${1:name}(${2:params})
+endsnippet
+
+snippet defm "defines a macro" !b
+defmacro ${1:name}(${2:params}) do
+  $3
+end
+endsnippet
+
+snippet qt "define a quote block" !b
+quote do
+  $1
+end
+endsnippet
+
+snippet qtl "defines a quote block inline" !b
+quote do: $1
+endsnippet
+
+snippet mod "defines a new module" !b
+defmodule ${1:name} do
+  $2
+end
+endsnippet
+
+snippet ht "inserts a [head | tail]" !i
+[${1:head}|${2:tail}]
+endsnippet
+
+snippet test "add a test case" !b
+test "${1:description}" do
+  $2
+end
+endsnippet
+
+snippet exactor "incorporate the GenServer behaviour" !b
+use ExActor.GenServer
+
+endsnippet
+
+snippet if "add an if block" !b
+if ${1:condition} do
+  $2
+end
+endsnippet
+
+snippet ife "add an if-else block" !b
+if ${1:condition} do
+  $2
+else
+  $3
+end
+endsnippet
+
+snippet inspect "inspect an expression result" !b
+IO.puts """
+#############################
+#{inspect $1}
+#############################
+"""
+endsnippet
+
+snippet fn "insert an anonymous function" !i
+fn(${1:args}) -> ${2} end
+endsnippet
+
+snippet & "insert an anonymous function short syntax" !i
+&($1)
+endsnippet
+
+snippet doc "insert a function documentation block" !b
+@doc """
+${1}
+"""
+endsnippet
+
+snippet mdoc "insert a module documentation block" !b
+@moduledoc """
+${1}
+"""
+endsnippet
+
+snippet # "insert a string interpolation" !i
+#{${1}}$2
+endsnippet
+
+snippet | "insert a pipe operator" !i
+|>
+endsnippet
+
+snippet |i "insert a pipe to IO.inspect" !i
+|> IO.inspect
+endsnippet
+
+snippet using "insert using macro" !b
+defmacro __using__(opts) do
+  $1
+end
+endsnippet
+
+snippet before_compile "insert before_compile macro" !b
+defmacro __before_compile__(env) do
+  $1
+end
+endsnippet
+
+snippet cpub "insert comment denoting public functions" !i
+# PUBLIC ###################################################
+endsnippet
+
+snippet cpubapi "insert comment denoting public API functions" !i
+# PUBLIC API ###############################################
+endsnippet
+
+snippet cpriv "insert comment denoting private functions" !i
+# PRIVATE ##################################################
+endsnippet
+
+snippet cprivapi "insert comment denoting private API functions" !i
+# PRIVATE API ##############################################
+endsnippet
+
+snippet cmixin "insert comment denoting mixin option functions" !i
+# MIXIN OPTIONS ############################################
+endsnippet
+
+snippet ipry "insert IEx pry for debugging" !b
+require IEx; IEx.pry
+endsnippet
+
+snippet	ip "insert IO.puts" !b
+IO.puts
+endsnippet
+
+snippet	ii "insert IO.inspect" !b
+IO.inspect
+endsnippet
+
+snippet con "insert an ESpec context" !b
+context "${1}"
+endsnippet
+
+snippet context "insert an ESpec context with block" !b
+context "${1}" do
+  ${2}
+end
+endsnippet
+
+snippet des "insert an ESpec describe" !b
+describe "${1}"
+endsnippet
+
+snippet describe "insert an ESpec describe with block" !b
+describe "${1}" do
+  ${2}
+end
+endsnippet
+
+snippet lt "insert an ESpec let on one line" !b
+let :${1:name}, do: ${2}
+endsnippet
+
+snippet let "insert an ESpec let" !b
+let :${1:name} do
+  ${2}
+end
+endsnippet
+
+snippet sub "insert an ESpec subject on one line" !b
+subject do: ${1}
+endsnippet
+
+snippet subj "insert an ESpec subject" !b
+subject do
+	${1}
+end
+endsnippet
+
+snippet it "insert an ESpec it on one line" !b
+it do: ${1}
+endsnippet
+
+snippet itd "insert an ESpec it with a do" !b
+it "${1}" do
+  ${2}
+end
+endsnippet
+
+snippet before "insert an ESpec before with block" !b
+before do
+  ${1}
+end
+endsnippet
+
+snippet allow "insert an ESpec allow" !b
+allow ${1} |> to(${2})
+endsnippet
+
+snippet	expect "insert an ESpec expect" !b
+expect ${1} |> to(${2})
+endsnippet
