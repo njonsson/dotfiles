@@ -1,0 +1,26 @@
+let g:EasyMotion_do_mapping=0
+let g:EasyMotion_keys='asdfjkoweriop'
+let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
+let g:EasyMotion_smartcase = 1
+nnoremap , <Plug>(easymotion-prefix)
+nmap S <Plug>(easymotion-sl2)
+nmap ,f  <Plug>(easymotion-f)
+nmap ,F  <Plug>(easymotion-F)
+"nmap ,t  <Plug>(easymotion-t)
+"nmap ,T  <Plug>(easymotion-T)
+nmap ,w  <Plug>(easymotion-w)
+nmap ,W  <Plug>(easymotion-W)
+nmap ,b  <Plug>(easymotion-b)
+nmap ,B  <Plug>(easymotion-B)
+nmap ,e  <Plug>(easymotion-e)
+nmap ,E  <Plug>(easymotion-E)
+nmap ,ge <Plug>(easymotion-ge)
+nmap ,gE <Plug>(easymotion-gE)
+nmap ,l <Plug>(easymotion-lineforward)
+nmap ,j <Plug>(easymotion-j)
+nmap ,k <Plug>(easymotion-k)
+nmap ,h <Plug>(easymotion-linebackward)
+"nmap ,n  <Plug>(easymotion-n)
+"nmap ,N  <Plug>(easymotion-N)
+nmap ,s  <Plug>(easymotion-s2)
+nmap ,a  <Plug>(easymotion-sn)
