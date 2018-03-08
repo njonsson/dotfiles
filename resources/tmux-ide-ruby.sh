@@ -63,31 +63,11 @@ if [ -d app ] && [ -d config ] && [ -d db ]; then
 
   server_env_opt=`if [ $SERVER_RAILS_ENV ]; then echo " -e $SERVER_RAILS_ENV"; fi`
 
-  zeus=''
-  if [ -e zeus.json ]; then
-    which zeus >/dev/null
-    if [ $? = 0 ]; then
-      zeus=true
-    fi
-  fi
-  if [ $zeus ]; then
-    echo "* Detected Zeus configuration"
-    target=$session_name1.`if [ $guard ]; then echo 3; else echo 2; fi`
-    $tmux_cmd split-window -v -p 50 -t $target
-    $tmux_cmd send-keys -t $target 'zeus start' C-m # No Bundler
+  $tmux_cmd new-window -t $session_name -n 'web server'
+  $tmux_cmd send-keys -t $session_name:2 "$bundle_exec `if [ -f script/server ]; then echo 'script/'; else echo 'rails '; fi`server$server_env_opt" C-m
 
-    $tmux_cmd new-window -t $session_name -n 'web server'
-    $tmux_cmd send-keys -t $session_name:2 "zeus server$server_env_opt" # No Bundler
-
-    $tmux_cmd new-window -t $session_name -n REPL
-    $tmux_cmd send-keys -t $session_name:3 'zeus console' # No Bundler
-  else
-    $tmux_cmd new-window -t $session_name -n 'web server'
-    $tmux_cmd send-keys -t $session_name:2 "$bundle_exec `if [ -f script/server ]; then echo 'script/'; else echo 'rails '; fi`server$server_env_opt" C-m
-
-    $tmux_cmd new-window -t $session_name -n REPL
-    $tmux_cmd send-keys -t $session_name:3 "$bundle_exec `if [ -f script/console ]; then echo 'script/'; else echo 'rails '; fi`console" C-m
-  fi
+  $tmux_cmd new-window -t $session_name -n REPL
+  $tmux_cmd send-keys -t $session_name:3 "$bundle_exec `if [ -f script/console ]; then echo 'script/'; else echo 'rails '; fi`console" C-m
 else
   $tmux_cmd new-window -t $session_name -n REPL
   if [ $bundler ]; then
