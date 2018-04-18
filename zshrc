@@ -51,6 +51,9 @@ PATH=$PATH:/Library/Frameworks/AndroidDeveloperTools/sdk/platform-tools # Add An
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
+# Enable IEx history.
+export ERL_AFLAGS="-kernel shell_history enabled"
+
 echo
 todo --list
 echo
