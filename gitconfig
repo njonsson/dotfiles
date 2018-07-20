@@ -42,3 +42,5 @@
 	rebase = true
 [gui]
 	fontdiff = -family Mensch -size 11 -weight normal -slant roman -underline 0 -overstrike 0
+[pager]
+	branch = false
