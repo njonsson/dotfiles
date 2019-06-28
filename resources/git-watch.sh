@@ -71,7 +71,7 @@ stat_commit_loop() {
     git add --all \
       && git diff --exit-code --staged &>/dev/null
     if [[ $? != 0 ]]; then
-      local output=$(git diff --staged --stat)
+      local output=$(git diff --color --staged --stat)
       [[ $cr == true ]] && printf "\n"
       git commit --message "$COMMIT_MESSAGE" --quiet \
         && printf "Committed:\n"         \
