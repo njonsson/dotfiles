@@ -2,12 +2,12 @@
 
 set -o pipefail
 
-printf "*** Updating \e[3masdf\e[23m ...\n"
+printf "*** Updating \e[4masdf\e[24m ...\n"
 printf "\e[2m"
 asdf update \
   && asdf plugin-update --all \
   && printf "\e[22m" \
-  && printf "*** Successfully updated \e[3masdf\e[23m\n"
+  && printf "*** Successfully updated \e[4masdf\e[24m\n"
 
 echo "\n*** Listing available Elixir versions ..."
 # Include only versions rather than branches.
@@ -36,5 +36,5 @@ echo "\n*** Listing available Rust versions ..."
 asdf list-all rust \
   | tail -3
 
-printf "\n*** Active versions via \e[3masdf\e[23m:\n"
+printf "\n*** Active versions via \e[4masdf\e[24m:\n"
 asdf current
