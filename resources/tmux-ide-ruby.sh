@@ -64,14 +64,14 @@ if [ -d app ] && [ -d config ] && [ -d db ]; then
   server_env_opt=`if [ $SERVER_RAILS_ENV ]; then echo " -e $SERVER_RAILS_ENV"; fi`
 
   $tmux_cmd new-window -t $session_name -n 'web server'
-  $tmux_cmd send-keys -t $session_name:2 "$bundle_exec `if [ -f script/server ]; then echo 'script/'; else echo 'rails '; fi`server$server_env_opt" C-m
+  $tmux_cmd send-keys -t $session_name:2 "$bundle_exec rails server$server_env_opt || $bundle_exec script/server$server_env_opt" C-m
 
   $tmux_cmd new-window -t $session_name -n REPL
-  $tmux_cmd send-keys -t $session_name:3 "$bundle_exec `if [ -f script/console ]; then echo 'script/'; else echo 'rails '; fi`console" C-m
+  $tmux_cmd send-keys -t $session_name:3 "$bundle_exec rails console || $bundle_exec script/console" C-m
 else
   $tmux_cmd new-window -t $session_name -n REPL
   if [ $bundler ]; then
-    $tmux_cmd send-keys -t $session_name:2 "bundle console" C-m
+    $tmux_cmd send-keys -t $session_name:2 "bin/console || bundle console" C-m
   else
     $tmux_cmd send-keys -t $session_name:2 "irb" C-m
   fi
