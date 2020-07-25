@@ -26,23 +26,26 @@ todo_file() {
 }
 
 todo_help() {
-  file=$(todo_file)
-  printf "A simple to-do list, stored in ${file/$HOME/~}\n\n"
+  local file=$(todo_file)
+  local file="${file/$HOME/~}"
+  local program=$(basename $0)
 
-  printf "  $(basename $0) Something to do   Adds \"Something to do\" to the to-do list\n\n"
+  printf "A simple to-do list, stored in \e[4m$file\e[24m\n\n"
 
-  printf "  $(basename $0) --edit            Opens the to-do list in your editor\n"
-  printf "  $(basename $0) -e\n"
-  printf "  $(basename $0)\n\n"
+  printf "  \e[1m$program Something to do\e[22m   Adds \"Something to do\" as new item in the to-do list\n\n"
 
-  printf "  $(basename $0) --list            Lists to-do items\n"
-  printf "  $(basename $0) -l\n\n"
+  printf "  \e[1m$program --edit\e[22m            Opens the to-do list in your editor\n"
+  printf "  \e[1m$program -e\e[22m\n"
+  printf "  \e[1m$program\e[22m\n\n"
 
-  printf "  $(basename $0) --open            Opens the to-do list in the application associated with \e[4m$(todo_file)\e[24m\n"
-  printf "  $(basename $0) -o\n\n"
+  printf "  \e[1m$program --list\e[22m            Lists to-do items\n"
+  printf "  \e[1m$program -l\e[22m\n\n"
 
-  printf "  $(basename $0) --help            Displays this help message\n"
-  printf "  $(basename $0) -h\n"
+  printf "  \e[1m$program --open\e[22m            Opens the to-do list in the application associated with \e[4m$file\e[24m\n"
+  printf "  \e[1m$program -o\e[22m\n\n"
+
+  printf "  \e[1m$program --help\e[22m            Displays this help message\n"
+  printf "  \e[1m$program -h\e[22m\n"
 }
 
 todo_list() {
