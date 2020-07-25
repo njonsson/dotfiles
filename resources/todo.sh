@@ -9,9 +9,11 @@ todo_edit() {
 }
 
 todo_exit_with_number_of_items() {
-  file="$(todo_file)"
-  if [ -s "$file" ]; then
-    exit $(wc -l $file | awk '{ print $1 }')
+  if [ -s "$(todo_file)" ]; then
+    local wc_output=$(wc -l $(todo_file))
+    local wc_output_tokens=($wc_output)
+    local line_count=${wc_output_tokens[0]}
+    exit $line_count
   else
     exit 0
   fi
