@@ -52,8 +52,8 @@ todo_help() {
 
 todo_list() {
   if [ -s "$(todo_file)" ]; then
-    title="To-do list"
-    title_length=${#title}
+    local title="To-do list"
+    local title_length=${#title}
     printf "\e[4m\e[1m$title\e[22m"
     for i in $(seq 1 $(($(tput cols) - $title_length))); do
       printf " "
