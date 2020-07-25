@@ -1,16 +1,16 @@
 #! /usr/bin/env sh
 
 todo_add() {
-  printf "* $*\n" >>$(todo_file)
+  printf "* $*\n" >>$(todo_filename)
 }
 
 todo_edit() {
-  $EDITOR $(todo_file)
+  $EDITOR $(todo_filename)
 }
 
 todo_exit_with_number_of_items() {
-  if [ -s "$(todo_file)" ]; then
-    local wc_output=$(wc -l $(todo_file))
+  if [ -s "$(todo_filename)" ]; then
+    local wc_output=$(wc -l $(todo_filename))
     local wc_output_tokens=($wc_output)
     local line_count=${wc_output_tokens[0]}
     exit $line_count
@@ -19,7 +19,7 @@ todo_exit_with_number_of_items() {
   fi
 }
 
-todo_file() {
+todo_filename() {
   if [ "$HOME/.todo.markdown" -nt "$HOME/.todo.md" ]; then
     printf "$HOME/.todo.markdown\n"
   else
@@ -28,8 +28,8 @@ todo_file() {
 }
 
 todo_help() {
-  local file=$(todo_file)
-  local file="${file/$HOME/~}"
+  local filename=$(todo_filename)
+  local filename="${filename/$HOME/~}"
   local program=$(basename $0)
 
   printf "A simple to-do list, stored in \e[4m$file\e[24m\n\n"
@@ -43,7 +43,7 @@ todo_help() {
   printf "  \e[1m$program --list\e[22m            Lists to-do items\n"
   printf "  \e[1m$program -l\e[22m\n\n"
 
-  printf "  \e[1m$program --open\e[22m            Opens the to-do list in the application associated with \e[4m$file\e[24m\n"
+  printf "  \e[1m$program --open\e[22m            Opens the to-do list in the application associated with \e[4m$filename\e[24m\n"
   printf "  \e[1m$program -o\e[22m\n\n"
 
   printf "  \e[1m$program --help\e[22m            Displays this help message\n"
@@ -51,7 +51,7 @@ todo_help() {
 }
 
 todo_list() {
-  if [ -s "$(todo_file)" ]; then
+  if [ -s "$(todo_filename)" ]; then
     local title="To-do list"
     local title_length=${#title}
     printf "\e[4m\e[1m$title\e[22m"
@@ -59,14 +59,14 @@ todo_list() {
       printf " "
     done
     printf "\e[24m\n"
-    cat "$(todo_file)"
+    cat "$(todo_filename)"
   # else
   #   printf "Nothing in the to-do list\n"
   fi
 }
 
 todo_open() {
-  open "$(todo_file)"
+  open "$(todo_filename)"
 }
 
 case "$*" in
