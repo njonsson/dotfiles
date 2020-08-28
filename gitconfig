@@ -21,12 +21,6 @@
 	spring-cleaning = for-each-ref --format='%(refname:short) ... %(committerdate:short)' --sort=-committerdate
 	sum = "!PAGER=cat git show HEAD --format=format:%h%n --no-patch"
 	touch = "!git commit --amend --date=\"`date`\" --no-edit" $*
-	watch = "!clear;fswatch --exclude .git . | \
-	  while read file; do                      \
-	    clear;                                 \
-	    git status --short;                    \
-	    git --no-pager diff --shortstat;       \
-	  done;"
 [push]
 	default = simple
 [core]
