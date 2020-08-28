@@ -74,7 +74,7 @@ stat_commit_loop() {
       local output=$(git diff --color --staged --stat)
       [[ $cr == true ]] && printf "\n"
       git commit --message "$COMMIT_MESSAGE" --quiet \
-        && printf "Committed:\n"         \
+        && printf "Committed at `date`:\n"           \
         && printf "$output\n"
     fi
     print_verbose '.'
