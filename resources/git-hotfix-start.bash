@@ -1,15 +1,6 @@
 #! /usr/bin/env bash
 
-case $1 in
-  "" | "--help" | "-h")
-    echo Usage:
-    echo "  git hotfix-start HOTFIXNAME"
-    echo "  git hotfix-start TAG HOTFIXNAME"
-    echo "  git hotfix-start --help"
-    echo "  git hotfix-start -h"
-    exit
-    ;;
-esac
+set -Eeuo pipefail
 
 announce() {
   echo -e -n "*** $1 ... "
@@ -27,6 +18,17 @@ perform() {
     exit $result
   fi
 }
+
+case "${1-}" in
+  "" | "--help" | "-h")
+    echo Usage:
+    echo "  git hotfix-start HOTFIXNAME"
+    echo "  git hotfix-start TAG HOTFIXNAME"
+    echo "  git hotfix-start --help"
+    echo "  git hotfix-start -h"
+    exit
+    ;;
+esac
 
 if [ $2 ]; then
   HOTFIX=$2

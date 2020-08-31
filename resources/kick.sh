@@ -1,13 +1,13 @@
 #! /usr/bin/env sh
 
-set -o pipefail
+set -Eeuo pipefail
 
 arguments=("$@")
 arguments_count=$#
 
 function die {
-  message="$1"
-  status="$2"
+  message="${1-}"
+  status="${2-}"
   if [ "$message" != "" ]; then
     printf "$message\n" >&2
   fi
@@ -75,7 +75,7 @@ function parse_arguments {
         print_usage_and_die
         ;;
       *)
-        if [ "$expecting_message_opt" == true ]; then
+        if [ "${expecting_message_opt-}" == true ]; then
           expecting_message_opt=""
           if [ -z "$message_opt" ]; then
             message_opt="$argument"
@@ -89,7 +89,7 @@ function parse_arguments {
         ;;
     esac
   done
-  if [ -z "$user" ] || [ "$expecting_message_opt" != "" ]; then
+  if [ -z "${user-}" ] || [ "${expecting_message_opt-}" ]; then
     print_usage_and_die
   fi
 }

@@ -1,5 +1,7 @@
 #! /usr/bin/env sh
 
+set -Eeuo pipefail
+
 todo_add() {
   printf "* $*\n" >>$(todo_filename)
 }

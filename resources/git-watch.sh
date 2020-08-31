@@ -1,6 +1,6 @@
 #! /usr/bin/env sh
 
-set -o pipefail
+set -Eeuo pipefail
 
 SLEEP_INT_SECS=1
 
@@ -60,7 +60,7 @@ parse_arguments() {
 }
 
 print_verbose() {
-  [[ $VERBOSE == true ]] && printf "$*"
+  [[ $VERBOSE == true ]] && printf "$*" || true
 }
 
 stat_commit_loop() {
@@ -69,14 +69,13 @@ stat_commit_loop() {
   local cr=false
   while true; do
     git add --all \
-      && git diff --exit-code --staged &>/dev/null
-    if [[ $? != 0 ]]; then
+      && git diff --exit-code --staged &>/dev/null || (
       local output=$(git diff --color --staged --stat)
       [[ $cr == true ]] && printf "\n"
       git commit --message "$COMMIT_MESSAGE" --quiet \
         && printf "Committed at `date`:\n"           \
         && printf "$output\n"
-    fi
+    )
     print_verbose '.'
     if [[ $VERBOSE == true ]]; then
       local cr=true

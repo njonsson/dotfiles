@@ -1,16 +1,18 @@
 #!/usr/bin/env bash
 
+set -Eeuo pipefail
+
 function die {
-  message="$1"
+  message="${1-}"
   printf "%s" "$message" >&2
-  status="$2"
+  status="${2-}"
   exit $status || 1
 }
 
 function main {
   parse_arguments $@
 
-  if [ -z "$file" ]; then
+  if [ -z "${file-}" ]; then
     process_stream
   else
     process_file
@@ -50,7 +52,7 @@ function parse_arguments {
         expecting_bytes_opt=""
         ;;
       *)
-        if [ -t 0 ] && [ -z "$file" ] && [ -f "$argument" ]; then
+        if [ -t 0 ] && [ -z "${file-}" ] && [ -f "$argument" ]; then
           file="$argument"
         else
           print_usage_and_die
@@ -61,9 +63,9 @@ function parse_arguments {
     esac
   done
 
-  if [ -t 0 ] && [ -z "$file" ]; then
+  if [ -t 0 ] && [ -z "${file-}" ]; then
     print_usage_and_die
-  elif [ -z "$num_opt" ]; then
+  elif [ -z "${num_opt-}" ]; then
     print_usage_and_die
   fi
 

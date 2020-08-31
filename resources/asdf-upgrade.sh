@@ -1,6 +1,6 @@
 #! /usr/bin/env sh
 
-set -o pipefail
+set -Eeuo pipefail
 
 printf "*** Updating \e[4masdf\e[24m and its plugins ...\n"
 printf "\e[2m"

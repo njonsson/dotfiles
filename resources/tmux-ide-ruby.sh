@@ -1,5 +1,7 @@
 #! /usr/bin/env sh
 
+set -Eeuo pipefail
+
 me=`basename $0`
 case $@ in
   "--help"|"-h" )
@@ -21,8 +23,8 @@ esac
 echo Setting up tmux IDE for Ruby
 
 bundler=''
-bundle check >/dev/null 2>&1
-case $? in
+bundle check >/dev/null 2>&1 && result=$? || result=$?
+case $result in
   # Exit code 0: bundle is defined and installed
   # Exit code 1: bundle is defined but not installed
   0|1 )
@@ -30,6 +32,7 @@ case $? in
     bundler=true
     ;;
 esac
+unset result
 
 bundle_exec=""
 if [ $bundler ]; then

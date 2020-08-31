@@ -1,5 +1,7 @@
 #! /usr/bin/env sh
 
+set -Eeuo pipefail
+
 me=`basename $0`
 case $@ in
   "--help"|"-h" )

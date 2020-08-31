@@ -1,5 +1,7 @@
 #! /usr/bin/env sh
 
+set -Eeuo pipefail
+
 clojure_files_count=`   find . -name '*.clj'                              | wc -l`
 elixir_files_count=`    find . -name '*.ex' -o -name '*.exs'              | wc -l`
 javascript_files_count=`find . -name '*.js' -not -path "./node_modules/*" | wc -l`

@@ -1,5 +1,7 @@
 #! /usr/bin/env sh
 
+set -Eeuo pipefail
+
 me=`basename $0`
 case $@ in
   "--help"|"-h" )
@@ -65,7 +67,7 @@ if [ $fswatch ]; then
   echo "while :; do"                                                                                                              >>$RUN_TESTS_SCRIPT
   echo "  grep --extended-regexp $grep_include_opts --recursive '^[^#]*([[:space:]]:debugger|IEx\\.pry)'$root_dirs >/dev/null"    >>$RUN_TESTS_SCRIPT
   echo "  iex=\$?"                                                                                                                >>$RUN_TESTS_SCRIPT
-  echo "  if [ -z '$espec' ]; then"                                                                                               >>$RUN_TESTS_SCRIPT
+  echo "  if [ -z '${espec-}' ]; then"                                                                                            >>$RUN_TESTS_SCRIPT
   echo "    grep --extended-regexp $grep_include_opts --recursive '^[^#]*[[:space:]]@tag +[^#]*:focus'$test_dirs >/dev/null"      >>$RUN_TESTS_SCRIPT
   echo "    focus=\$?"                                                                                                            >>$RUN_TESTS_SCRIPT
   echo "    focus_option='--only focus'"                                                                                          >>$RUN_TESTS_SCRIPT

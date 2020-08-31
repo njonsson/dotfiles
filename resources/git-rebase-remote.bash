@@ -1,11 +1,6 @@
 #! /usr/bin/env bash
 
-case $1 in
-  "" | "--help" | "-h")
-    display_help
-    exit
-    ;;
-esac
+set -Eeuo pipefail
 
 announce() {
   echo -e -n "*** $1 ... "
@@ -53,6 +48,13 @@ perform_discarding_stderr() {
     exit $result
   fi
 }
+
+case "${1-}" in
+  "" | "--help" | "-h")
+    display_help
+    exit
+    ;;
+esac
 
 if [[ "$3" == "" ]]; then
   REMOTE=$(default_remote)

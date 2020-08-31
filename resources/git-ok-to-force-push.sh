@@ -1,6 +1,6 @@
 #! /usr/bin/env sh
 
-set -o pipefail
+set -Eeuo pipefail
 
 display_usage() {
   printf "Usage: $(basename $0) [--help|-h] [--verbose|-v] [REMOTE] [BRANCH]\n"
@@ -59,14 +59,14 @@ main() {
 
   if [ "$remote_commit_hash" == "$local_commit_hash" ]; then
     printf "\033[32mOK\033[0m"
-    if [ "$VERBOSE" == 'true' ]; then
+    if [ "${VERBOSE-}" == true ]; then
       printf " because \033[4m$REMOTE\033[0m’s $remote_commit_hash == \033[4m$BRANCH\033[0m’s"
     fi
     printf "\n"
     exit 0
   else
     printf "\033[31mFetch required\033[0m"
-    if [ "$VERBOSE" == 'true' ]; then
+    if [ "${VERBOSE-}" == true ]; then
       printf " because \033[4m$REMOTE\033[0m’s $remote_commit_hash != local $local_commit_hash"
     fi
     printf "\n"
@@ -75,10 +75,10 @@ main() {
 }
 
 parse_arguments() {
-  if [ "$REMOTE" != '' ]; then
+  if [ "${REMOTE-}" ]; then
     printf "Using \$REMOTE of \033[4m$REMOTE\033[0m from environment\n"
   fi
-  if [ "$BRANCH" != '' ]; then
+  if [ "${BRANCH-}" ]; then
     printf "Using \$BRANCH of \033[4m$BRANCH\033[0m from environment\n"
   fi
 
@@ -106,7 +106,7 @@ parse_arguments() {
     esac
   done
 
-  case $(printf "$VERBOSE" | tr '[:upper:]' '[:lower:]') in
+  case "$(printf "${VERBOSE-}" | tr '[:upper:]' '[:lower:]')" in
     t* | y* )
       VERBOSE=true
       ;;
@@ -115,11 +115,11 @@ parse_arguments() {
       ;;
   esac
 
-  if [ "$REMOTE" == '' ]; then
+  if [ -z "${REMOTE-}" ]; then
     REMOTE=origin
   fi
 
-  if [ "$BRANCH" == '' ]; then
+  if [ -z "${BRANCH-}" ]; then
     BRANCH="$(git rev-parse --abbrev-ref HEAD)"
     if [ "$BRANCH" == 'HEAD' ]; then
       printf "\033[31mNo branch appears to be checked out\033[0m\n" >&2
