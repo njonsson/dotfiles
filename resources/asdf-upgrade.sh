@@ -17,14 +17,16 @@ asdf current 2>&1 | while read entry; do
   current_version=${tool_and_current_version[1]}
   latest_version=$(asdf latest $tool)
   if [ -z "$latest_version" ]; then
-    printf "*** Current \e[4m$tool\e[24m version "
-    printf "(\e[4m$current_version\e[24m) still installed —— "
-    printf "no latest version available\n"
+    latest_version=$(asdf latest $tool $current_version)
+  fi
+  if [ -z "$latest_version" ]; then
+    printf "*** Current \e[4m$tool\e[24m version (\e[4m$current_version\e[24m) "
+    printf "is still installed —— no latest version available\n"
     continue
   fi
 
   if [ "$current_version" = "$latest_version" ]; then
-    printf "*** Latest \e[4m$tool\e[24m (\e[4m$latest_version\e[24m) "
+    printf "*** Latest \e[4m$tool\e[24m (\e[4m$latest_version\e[24m) is "
     printf "already installed\n"
     continue
   fi
