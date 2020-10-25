@@ -146,17 +146,21 @@ todo_list() {
   local FILTER="${1-}"
 
   local items="$(todo_items $FILTER)"
-  local item_count=$(($(printf "$items" | grep --count '')))
-  if [ 0 -lt $item_count ]; then
-    # Underline the title.
-    local title_length=${#LIST_TITLE}
-    printf "\e[4m\e[1m$LIST_TITLE\e[22m"
-    for i in $(seq 1 $(($(tput cols) - $title_length))); do
-      printf " "
-    done
-    printf "\e[24m\n"
+  if [ -z "$items" ]; then
+    local item_count=0
+  else
+    local item_count=$(($(printf -- "$items\n" | wc -l)))
+    if [ 0 -lt $item_count ]; then
+      # Underline the title.
+      local title_length=${#LIST_TITLE}
+      printf "\e[4m\e[1m$LIST_TITLE\e[22m"
+      for i in $(seq 1 $(($(tput cols) - $title_length))); do
+        printf " "
+      done
+      printf "\e[24m\n"
 
-    printf -- "$items\n"
+      printf -- "$items\n"
+    fi
   fi
   return $item_count
 }
