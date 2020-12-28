@@ -22,7 +22,7 @@ esac
 echo Setting up tmux IDE for JavaScript
 
 session_name=`basename $(pwd)`
-tmux_cmd="tmux -S /var/tmux/$session_name"
+tmux_cmd="tmux -S $TMUX_SESSIONS_PATH/$session_name"
 $tmux_cmd new-session -s $session_name -d
 
 $tmux_cmd rename-window -t $session_name:1 'code'
