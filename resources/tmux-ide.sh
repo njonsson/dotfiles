@@ -51,6 +51,6 @@ elif [ $clojure_files_count    -lt $sh_files_count ] &&
      [ $ruby_files_count       -lt $sh_files_count ]; then
   TMUX_SESSIONS_PATH="$tmux_sessions_path" tmux-ide-sh "$@"
 else
-  echo "Could not automatically detect a Clojure, Elixir, JavaScript, Ruby, or shell-programming project" 1>&2
+  echo "Could not detect a Clojure, Elixir, JavaScript, Ruby, or shell project" >&2
   exit 1
 fi
