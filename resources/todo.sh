@@ -57,13 +57,13 @@ todo_ensure_file_exists() {
   fi
 
   printf "# $LIST_TITLE\n" >>"$(todo_filename)"
-  printf "\n"             >>"$(todo_filename)"
+  printf "\n"              >>"$(todo_filename)"
 
   local program=$(basename $0)
-  printf "> This file was created by the *$program* "  >>"$(todo_filename)"
-  printf "program. Run \`$program --help\` at the "    >>"$(todo_filename)"
-  printf "command line to learn about it.\n"           >>"$(todo_filename)"
-  printf "\n"                                          >>"$(todo_filename)"
+  printf "> This file was created by the *$program* " >>"$(todo_filename)"
+  printf "program. Run \`$program --help\` at the "   >>"$(todo_filename)"
+  printf "command line to learn about it.\n"          >>"$(todo_filename)"
+  printf "\n"                                         >>"$(todo_filename)"
 }
 
 todo_filename() {
