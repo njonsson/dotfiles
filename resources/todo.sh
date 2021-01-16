@@ -4,11 +4,25 @@ set -Eeuo pipefail
 
 LIST_TITLE="To-do list"
 
+indentation_width() {
+  local TEXT="$1"
+
+  local indentation_text=$(
+    printf -- "$TEXT" | grep --only-matching --regexp "^\s*"
+  )
+  local result=$((
+    $(
+      printf -- "$indentation_text" | wc -c
+    )
+  ))
+  echo "$result"
+}
+
 is_list_item() {
   local TEXT="$1"
 
   printf -- "$TEXT" \
-    | grep --regexp "^\([*+-]\|\d\+[.)]\)\s\+\S\+" \
+    | grep --regexp "^\s*\([*+-]\|\d\+[.)]\)\s\+\S\+" \
     >/dev/null
 }
 
@@ -16,7 +30,7 @@ is_list_item_in_completed_state() {
   local TEXT="$1"
 
   printf -- "$TEXT" \
-    | grep --regexp "^\([*+-]\|\d\+[.)]\)\(\s\+\[\S\]\)\s\+\S\+" \
+    | grep --regexp "^\s*\([*+-]\|\d\+[.)]\)\(\s\+\[\S\]\)\s\+\S\+" \
     >/dev/null
 }
 
@@ -24,7 +38,7 @@ is_list_item_in_incomplete_state() {
   local TEXT="$1"
 
   printf -- "$TEXT" \
-    | grep --regexp "^\([*+-]\|\d\+[.)]\)\(\s\+\[\s\]\)\s\+\S\+" \
+    | grep --regexp "^\s*\([*+-]\|\d\+[.)]\)\(\s\+\[\s\]\)\s\+\S\+" \
     >/dev/null
 }
 
@@ -119,24 +133,52 @@ todo_items() {
   local FILTER="${1-}"
 
   if [ -s "$(todo_filename)" ]; then
+    local unmatching_ancestors=()
+
     local ifs_original="$IFS"
     IFS='' # Read whitespace verbatim.
     while read line; do
       # Ignore lines that are not list items.
-      is_list_item "$line" \
-        || continue
+      is_list_item "$line" || continue
 
-      # Ignore completed items if we want incomplete.
-      [ "$FILTER" == INCOMPLETE ] \
-        && is_list_item_in_completed_state "$line" \
-        && continue
+      local item="$line"
+      local item_indent_width=$(indentation_width "$item")
 
-      # Ignore non-completed items if we want completed.
-      [ "$FILTER" == COMPLETED ] \
-        && ! is_list_item_in_completed_state "$line" \
-        && continue
+      # Discard unmatching siblings and younger relations in reverse order.
+      while [ 0 -lt ${#unmatching_ancestors[*]} ]; do
+        local last_unmatching_ancestor="${unmatching_ancestors[@]: -1}"
+        if [ $item_indent_width -le $(indentation_width "$last_unmatching_ancestor") ]; then
+          # Pop right.
+          local unmatching_ancestors_count="${#unmatching_ancestors[*]}"
+          local unmatching_ancestors=("${unmatching_ancestors[@]::$unmatching_ancestors_count-1}")
+        else
+          break
+        fi
+      done
 
-      printf -- "$line\n"
+      if [ "$FILTER" == COMPLETED ] && ! is_list_item_in_completed_state "$item"; then
+        local item_matches_filter=false
+      elif [ "$FILTER" == INCOMPLETE ] && is_list_item_in_completed_state "$item"; then
+        local item_matches_filter=false
+      else
+        local item_matches_filter=true
+      fi
+
+      if [ $item_matches_filter == true ]; then
+        # Print and discard unmatching ancestors in order.
+        while [ 0 -lt ${#unmatching_ancestors[*]} ]; do
+          printf -- "${unmatching_ancestors[0]}\n"
+
+          # Pop left.
+          local unmatching_ancestors=("${unmatching_ancestors[@]:1}")
+        done
+
+        printf -- "$item\n"
+      else
+        # Push right.
+        local unmatching_ancestors_count="${#unmatching_ancestors[*]}"
+        local unmatching_ancestors[$unmatching_ancestors_count]="$item"
+      fi
     done <"$(todo_filename)"
     IFS="$ifs_original"
   fi
