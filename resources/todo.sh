@@ -193,7 +193,7 @@ todo_list() {
   else
     local item_count=$(($(printf -- "$items\n" | wc -l)))
     if [ 0 -lt $item_count ]; then
-      # Underline the title.
+      # Print the title in bold, with a line underneath across the whole window.
       local title_length=${#LIST_TITLE}
       printf "\e[4m\e[1m$LIST_TITLE\e[22m"
       for i in $(seq 1 $(($(tput cols) - $title_length))); do
