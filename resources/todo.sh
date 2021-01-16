@@ -236,7 +236,7 @@ case "$*" in
     ;;
   -* )
     printf "Unrecognized option: \e[4m$*\e[24m\n"
-    exit 1
+    exit -1
     ;;
   * )
     todo_add "$*"
