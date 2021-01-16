@@ -195,11 +195,11 @@ todo_list() {
     if [ 0 -lt $item_count ]; then
       # Print the title in bold, with a line underneath across the whole window.
       local title_length=${#LIST_TITLE}
-      printf "\e[4m\e[1m$LIST_TITLE\e[22m"
+      printf "\e[4m\e[1m$LIST_TITLE\e[22m" >&2
       for i in $(seq 1 $(($(tput cols) - $title_length))); do
-        printf " "
+        printf " " >&2
       done
-      printf "\e[24m\n"
+      printf "\e[24m\n" >&2
 
       printf -- "$items\n"
     fi
@@ -235,7 +235,7 @@ case "$*" in
     todo_open
     ;;
   -* )
-    printf "Unrecognized option: \e[4m$*\e[24m\n"
+    printf "Unrecognized option: \e[4m$*\e[24m\n" >&2
     exit -1
     ;;
   * )
