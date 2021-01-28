@@ -3,6 +3,11 @@
 set -Eeuo pipefail
 
 LIST_TITLE="To-do list"
+PROGRAM=$(
+  basename $0
+)
+PROGRAM_TAG_LINE="A simple to-do list"
+PROGRAM_URL=https://github.com/njonsson/dotfiles
 
 indentation_width() {
   local TEXT="$1"
@@ -59,9 +64,8 @@ todo_ensure_file_exists() {
   printf "# $LIST_TITLE\n" >>"$(todo_filename)"
   printf "\n"              >>"$(todo_filename)"
 
-  local program=$(basename $0)
-  printf "> This file was created by the *$program* " >>"$(todo_filename)"
-  printf "program. Run \`$program --help\` at the "   >>"$(todo_filename)"
+  printf "> This file was created by the *$PROGRAM* " >>"$(todo_filename)"
+  printf "program. Run \`$PROGRAM --help\` at the "   >>"$(todo_filename)"
   printf "command line to learn about it.\n"          >>"$(todo_filename)"
   printf "\n"                                         >>"$(todo_filename)"
 }
@@ -77,54 +81,51 @@ todo_filename() {
 todo_help() {
   local filename="$(todo_filename)"
   local filename="${filename/$HOME/~}"
-  local program=$(basename $0)
 
-  local tag_line="A simple to-do list"
-  printf "$tag_line"
+  printf "$PROGRAM_TAG_LINE"
 
   # Right-align a credit.
-  local tag_line_length=${#tag_line}
-  local url=https://github.com/njonsson/dotfiles
-  local url_length=${#url}
+  local tag_line_length=${#PROGRAM_TAG_LINE}
+  local url_length=${#PROGRAM_URL}
   local space_length=$(($(tput cols) - $tag_line_length - $url_length))
   for i in $(seq 1 $space_length); do
     printf " "
   done
   unset i
-  printf "\e[2;4m$url\e[24;22m\n"
+  printf "\e[2;4m$PROGRAM_URL\e[24;22m\n"
 
   printf "\n"
 
-  printf "  \e[1m$program 'Something to do'\e[22m   Adds \e[4mSomething to do\e[24m as a new, incomplete item in the to-do list\n"
+  printf "  \e[1m$PROGRAM 'Something to do'\e[22m   Adds \e[4mSomething to do\e[24m as a new, incomplete item in the to-do list\n"
   printf "\n"
 
-  printf "  \e[1m$program --edit\e[22m              Opens the to-do list file in your \$EDITOR, \e[4m$EDITOR\e[24m\n"
-  printf "  \e[1m$program -e\e[22m\n"
-  printf "  \e[1m$program\e[22m\n"
+  printf "  \e[1m$PROGRAM --edit\e[22m              Opens the to-do list file in your \$EDITOR, \e[4m$EDITOR\e[24m\n"
+  printf "  \e[1m$PROGRAM -e\e[22m\n"
+  printf "  \e[1m$PROGRAM\e[22m\n"
   printf "\n"
 
-  printf "  \e[1m$program --filename\e[22m          Displays the to-do list filename\n"
-  printf "  \e[1m$program -f\e[22m\n"
+  printf "  \e[1m$PROGRAM --filename\e[22m          Displays the to-do list filename\n"
+  printf "  \e[1m$PROGRAM -f\e[22m\n"
   printf "\n"
 
-  printf "  \e[1m$program --list\e[22m              Lists all to-do items\n"
-  printf "  \e[1m$program -l\e[22m\n"
+  printf "  \e[1m$PROGRAM --list\e[22m              Lists all to-do items\n"
+  printf "  \e[1m$PROGRAM -l\e[22m\n"
   printf "\n"
 
-  printf "  \e[1m$program --list-completed\e[22m    Lists completed to-do items\n"
-  printf "  \e[1m$program -c\e[22m\n"
+  printf "  \e[1m$PROGRAM --list-completed\e[22m    Lists completed to-do items\n"
+  printf "  \e[1m$PROGRAM -c\e[22m\n"
   printf "\n"
 
-  printf "  \e[1m$program --list-incomplete\e[22m   Lists incomplete to-do items\n"
-  printf "  \e[1m$program -i\e[22m\n"
+  printf "  \e[1m$PROGRAM --list-incomplete\e[22m   Lists incomplete to-do items\n"
+  printf "  \e[1m$PROGRAM -i\e[22m\n"
   printf "\n"
 
-  printf "  \e[1m$program --open\e[22m              Opens the to-do list file in the application associated with it\n"
-  printf "  \e[1m$program -o\e[22m\n"
+  printf "  \e[1m$PROGRAM --open\e[22m              Opens the to-do list file in the application associated with it\n"
+  printf "  \e[1m$PROGRAM -o\e[22m\n"
   printf "\n"
 
-  printf "  \e[1m$program --help\e[22m              Displays this help message\n"
-  printf "  \e[1m$program -h\e[22m\n"
+  printf "  \e[1m$PROGRAM --help\e[22m              Displays this help message\n"
+  printf "  \e[1m$PROGRAM -h\e[22m\n"
   printf "\n"
 
   printf "  Exit status is the number of to-do list items displayed.\n"
