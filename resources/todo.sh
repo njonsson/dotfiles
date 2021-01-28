@@ -90,6 +90,7 @@ todo_help() {
   for i in $(seq 1 $space_length); do
     printf " "
   done
+  unset i
   printf "\e[2;4m$url\e[24;22m\n"
 
   printf "\n"
@@ -199,6 +200,7 @@ todo_list() {
       for i in $(seq 1 $(($(tput cols) - $title_length))); do
         printf " " >&2
       done
+      unset i
       printf "\e[24m\n" >&2
 
       printf -- "$items\n"
