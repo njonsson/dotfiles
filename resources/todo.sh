@@ -10,10 +10,10 @@ PROGRAM_TAG_LINE="A simple to-do list"
 PROGRAM_URL=https://github.com/njonsson/dotfiles
 
 indentation_width() {
-  local TEXT="$1"
+  local text_arg="$1"
 
   local indentation_text=$(
-    printf -- "$TEXT" | grep --only-matching --regexp "^\s*"
+    printf -- "$text_arg" | grep --only-matching --regexp "^\s*"
   )
   local result=$((
     $(
@@ -24,25 +24,25 @@ indentation_width() {
 }
 
 is_list_item() {
-  local TEXT="$1"
+  local text_arg="$1"
 
-  printf -- "$TEXT" \
+  printf -- "$text_arg" \
     | grep --regexp "^\s*\([*+-]\|\d\+[.)]\)\s\+\S\+" \
     >/dev/null
 }
 
 is_list_item_in_completed_state() {
-  local TEXT="$1"
+  local text_arg="$1"
 
-  printf -- "$TEXT" \
+  printf -- "$text_arg" \
     | grep --regexp "^\s*\([*+-]\|\d\+[.)]\)\(\s\+\[\S\]\)\s\+\S\+" \
     >/dev/null
 }
 
 is_list_item_in_incomplete_state() {
-  local TEXT="$1"
+  local text_arg="$1"
 
-  printf -- "$TEXT" \
+  printf -- "$text_arg" \
     | grep --regexp "^\s*\([*+-]\|\d\+[.)]\)\(\s\+\[\s\]\)\s\+\S\+" \
     >/dev/null
 }
@@ -57,17 +57,21 @@ todo_edit() {
 }
 
 todo_ensure_file_exists() {
-  if [ -a "$(todo_filename)" ]; then
+  local filename=$(
+    todo_filename
+  )
+
+  if [ -a "$filename" ]; then
     return
   fi
 
-  printf "# $LIST_TITLE\n" >>"$(todo_filename)"
-  printf "\n"              >>"$(todo_filename)"
+  printf "# $LIST_TITLE\n" >>"$filename"
+  printf "\n"              >>"$filename"
 
-  printf "> This file was created by the *$PROGRAM* " >>"$(todo_filename)"
-  printf "program. Run \`$PROGRAM --help\` at the "   >>"$(todo_filename)"
-  printf "command line to learn about it.\n"          >>"$(todo_filename)"
-  printf "\n"                                         >>"$(todo_filename)"
+  printf "> This file was created by the *$PROGRAM* " >>"$filename"
+  printf "program. Run \`$PROGRAM --help\` at the "   >>"$filename"
+  printf "command line to learn about it.\n"          >>"$filename"
+  printf "\n"                                         >>"$filename"
 }
 
 todo_filename() {
@@ -79,7 +83,9 @@ todo_filename() {
 }
 
 todo_help() {
-  local filename="$(todo_filename)"
+  local filename=$(
+    todo_filename
+  )
   local filename="${filename/$HOME/~}"
 
   printf "$PROGRAM_TAG_LINE"
@@ -132,9 +138,12 @@ todo_help() {
 }
 
 todo_items() {
-  local FILTER="${1-}"
+  local filter_arg="${1-}"
+  local filename=$(
+    todo_filename
+  )
 
-  if [ -s "$(todo_filename)" ]; then
+  if [ -s "$filename" ]; then
     local unmatching_ancestors=()
 
     local ifs_original="$IFS"
@@ -158,9 +167,9 @@ todo_items() {
         fi
       done
 
-      if [ "$FILTER" == COMPLETED ] && ! is_list_item_in_completed_state "$item"; then
+      if [ "$filter_arg" == COMPLETED ] && ! is_list_item_in_completed_state "$item"; then
         local item_matches_filter=false
-      elif [ "$FILTER" == INCOMPLETE ] && is_list_item_in_completed_state "$item"; then
+      elif [ "$filter_arg" == INCOMPLETE ] && is_list_item_in_completed_state "$item"; then
         local item_matches_filter=false
       else
         local item_matches_filter=true
@@ -181,15 +190,17 @@ todo_items() {
         local unmatching_ancestors_count="${#unmatching_ancestors[*]}"
         local unmatching_ancestors[$unmatching_ancestors_count]="$item"
       fi
-    done <"$(todo_filename)"
+    done <"$filename"
     IFS="$ifs_original"
   fi
 }
 
 todo_list() {
-  local FILTER="${1-}"
+  local filter_arg="${1-}"
 
-  local items="$(todo_items $FILTER)"
+  local items=$(
+    todo_items $filter_arg
+  )
   if [ -z "$items" ]; then
     local item_count=0
   else
