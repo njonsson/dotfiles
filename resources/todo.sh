@@ -97,7 +97,7 @@ todo_help() {
   printf "  \e[1m$program 'Something to do'\e[22m   Adds \e[4mSomething to do\e[24m as a new, incomplete item in the to-do list\n"
   printf "\n"
 
-  printf "  \e[1m$program --edit\e[22m              Opens the to-do list in your \$EDITOR, \e[4m$EDITOR\e[24m\n"
+  printf "  \e[1m$program --edit\e[22m              Opens the to-do list file in your \$EDITOR, \e[4m$EDITOR\e[24m\n"
   printf "  \e[1m$program -e\e[22m\n"
   printf "  \e[1m$program\e[22m\n"
   printf "\n"
@@ -118,7 +118,7 @@ todo_help() {
   printf "  \e[1m$program -i\e[22m\n"
   printf "\n"
 
-  printf "  \e[1m$program --open\e[22m              Opens the to-do list in the application associated with \e[4m$filename\e[24m\n"
+  printf "  \e[1m$program --open\e[22m              Opens the to-do list file in the application associated with it\n"
   printf "  \e[1m$program -o\e[22m\n"
   printf "\n"
 
