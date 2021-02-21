@@ -9,6 +9,31 @@ PROGRAM=$(
 PROGRAM_TAG_LINE="A simple to-do list"
 PROGRAM_URL=https://github.com/njonsson/dotfiles
 
+canonical_filename() {
+  local filename="$1"
+
+  if [ "$filename" == "$HOME" ]; then
+    local filename="~"
+  else
+    local filename="${filename/#$HOME\//~/}"
+  fi
+  printf "$filename\n"
+}
+
+horizontal_rule() {
+  local text_arg="${1-}"
+  local unformatted_text_arg="${2-$text_arg}"
+
+  # Print the title in bold, with a line underneath across the whole window.
+  local text_arg_length=${#unformatted_text_arg}
+  printf "\e[4m$text_arg"
+  for i in $(seq 1 $(($(tput cols) - $text_arg_length))); do
+    printf " "
+  done
+  unset i
+  printf "\e[24m\n"
+}
+
 indentation_width() {
   local text_arg="$1"
 
@@ -45,6 +70,18 @@ is_list_item_in_incomplete_state() {
   printf -- "$text_arg" \
     | grep --regexp "^\s*\([*+-]\|\d\+[.)]\)\(\s\+\[\s\]\)\s\+\S\+" \
     >/dev/null
+}
+
+right_justify() {
+  local text_arg="$1"
+  local unformatted_text_arg=${2-$text_arg}
+
+  local text_arg_length=${#unformatted_text_arg}
+  for i in $(seq 1 $(($(tput cols) - $text_arg_length))); do
+    printf " "
+  done
+  unset i
+  printf "$text_arg\n"
 }
 
 todo_add() {
@@ -206,19 +243,22 @@ todo_list() {
   else
     local item_count=$(($(printf -- "$items\n" | wc -l)))
     if [ 0 -lt $item_count ]; then
-      # Print the title in bold, with a line underneath across the whole window.
-      local title_length=${#LIST_TITLE}
-      printf "\e[4m\e[1m$LIST_TITLE\e[22m" >&2
-      for i in $(seq 1 $(($(tput cols) - $title_length))); do
-        printf " " >&2
-      done
-      unset i
-      printf "\e[24m\n" >&2
-
+      todo_list_heading >&2
       printf -- "$items\n"
     fi
   fi
   return $item_count
+}
+
+todo_list_heading() {
+  horizontal_rule "\e[1m$LIST_TITLE\e[22m" "$LIST_TITLE"
+
+  local filename=$(
+    canonical_filename $(
+      todo_filename
+    )
+  )
+  right_justify "\e[4m$filename\e[24m" "$filename"
 }
 
 todo_open() {
