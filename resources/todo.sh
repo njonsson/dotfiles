@@ -205,14 +205,14 @@ todo_items() {
       done
 
       if [ "$filter_arg" == COMPLETED ] && ! is_list_item_in_completed_state "$item"; then
-        local item_matches_filter=false
+        local item_matches_filter=0
       elif [ "$filter_arg" == INCOMPLETE ] && is_list_item_in_completed_state "$item"; then
-        local item_matches_filter=false
+        local item_matches_filter=0
       else
-        local item_matches_filter=true
+        local item_matches_filter=1
       fi
 
-      if [ $item_matches_filter == true ]; then
+      if ((item_matches_filter)); then
         # Print and discard unmatching ancestors in order.
         while [ 0 -lt ${#unmatching_ancestors[*]} ]; do
           printf -- "${unmatching_ancestors[0]}\n"
