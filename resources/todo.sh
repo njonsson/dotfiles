@@ -289,7 +289,7 @@ todo_list() {
   else
     local item_count=$(($(printf -- "$items\n" | wc -l)))
     if [ 0 -lt $item_count ]; then
-      todo_list_heading >&2
+      todo_list_heading "$filter_arg" >&2
       printf -- "$items\n"
     fi
   fi
@@ -297,7 +297,18 @@ todo_list() {
 }
 
 todo_list_heading() {
-  horizontal_rule "\e[1m$LIST_TITLE\e[22m" "$LIST_TITLE"
+  local filter_arg="$1"
+
+  if [ -z "$filter_arg" ]; then
+    local item_category=all
+  else
+    local item_category=$(
+      echo "$filter_arg" | tr '[:upper:]' '[:lower:]'
+    )
+  fi
+  local title_formatted="\e[1m$LIST_TITLE\e[22m ($item_category items)"
+  local title_unformatted="$LIST_TITLE ($item_category items)"
+  horizontal_rule "$title_formatted" "$title_unformatted"
 
   local filename=$(
     canonical_filename $(
