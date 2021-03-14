@@ -60,8 +60,6 @@ export GEM_OPEN_EDITOR="$EDITOR"
 export GOPATH="$HOME/golang"
 export PATH="$GOPATH/bin:$PATH"
 
-PATH=$PATH:/Library/Frameworks/AndroidDeveloperTools/sdk/platform-tools # Add Android SDK platform tools to PATH
-
 # Set up asdf for tool version management.
 . $HOME/.asdf/asdf.sh
 . $HOME/.asdf/completions/asdf.bash
