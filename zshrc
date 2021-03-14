@@ -69,9 +69,16 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 # Enable IEx history.
 export ERL_AFLAGS="-kernel shell_history enabled"
 
-echo
-todo --list
-echo
-
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
+
+todo_list_incomplete_if_filename_changed() {
+  if [ "$(todo --filename)" != "${_TODO_FILENAME_PREVIOUS-}" ]; then
+    export _TODO_FILENAME_PREVIOUS=$(
+      todo --filename
+    )
+    todo --list-incomplete
+  fi
+}
+export PROMPT_COMMAND=todo_list_incomplete_if_filename_changed
+precmd() { eval "$PROMPT_COMMAND" } # Workaround for zsh.
