@@ -112,9 +112,39 @@ todo_ensure_file_exists() {
 }
 
 todo_filename() {
-  if [ "$HOME/.todo.markdown" -nt "$HOME/.todo.md" ]; then
-    printf "$HOME/.todo.markdown\n"
+  local file_path="${TODO_FILE_PATH-}"
+  local file_path_is_dir=0
+
+  if [ -d "$file_path" ]; then
+    # An existing directory is provided, so find a file within it.
+    local file_path_is_dir=1
+  elif [ -n "$file_path" ]; then
+    # A path is provided, so use it as the filename.
+    printf "$file_path\n"
+    return 0
   else
+    # No path is provided, so find a file in the working directory.
+    local file_path=$(
+      pwd
+    )
+  fi
+
+  # Find the most-recently touched file in the directory.
+  local file_basename=$(
+    ls -Act "$file_path" 2>/dev/null | grep --extended-regexp "(\.todo|^TODO|^todo)\.(md|markdown)$" 2>/dev/null \
+      | head -1
+  )
+  if [ -n "$file_basename" ]; then
+    printf "$file_path/$file_basename\n"
+    return 0
+  fi
+
+  # No file was found in the directory.
+  if ((file_path_is_dir)); then
+    # Use the standard filename within the directory.
+    printf "$file_path/todo.md\n"
+  else
+    # Use the standard dotfile filename within the home directory.
     printf "$HOME/.todo.md\n"
   fi
 }
@@ -142,7 +172,7 @@ todo_help() {
   printf "  \e[1m$PROGRAM 'Something to do'\e[22m   Adds \e[4mSomething to do\e[24m as a new, incomplete item in the to-do list\n"
   printf "\n"
 
-  printf "  \e[1m$PROGRAM --edit\e[22m              Opens the to-do list file in your \$EDITOR, \e[4m$EDITOR\e[24m\n"
+  printf "  \e[1m$PROGRAM --edit\e[22m              Opens the to-do list file in your \e[1m\$EDITOR\e[22m, \e[4m$EDITOR\e[24m\n"
   printf "  \e[1m$PROGRAM -e\e[22m\n"
   printf "  \e[1m$PROGRAM\e[22m\n"
   printf "\n"
@@ -169,6 +199,22 @@ todo_help() {
 
   printf "  \e[1m$PROGRAM --help\e[22m              Displays this help message\n"
   printf "  \e[1m$PROGRAM -h\e[22m\n"
+  printf "\n"
+
+  printf "  Existing to-do list files in the current directory take precedence over ones in \e[4m~/\e[24m.\n"
+  printf "\n"
+
+  printf "  To-do list files are detected in a directory if their names:\n"
+  printf "\n"
+  printf "    • Are \e[4mtodo.md\e[24m or \e[4mtodo.markdown\e[24m, or\n"
+  printf "    • Are \e[4mTODO.md\e[24m or \e[4mTODO.markdown\e[24m, or\n"
+  printf "    • End with \e[4m.todo.md\e[24m or \e[4m.todo.markdown\e[24m\n"
+  printf "\n"
+
+  printf "  The most recently modified to-do list file in a directory takes precedence.\n"
+  printf "\n"
+
+  printf "  Set \e[1m\$TODO_FILE_PATH\e[22m in order to customize the to-do list filename or directory.\n"
   printf "\n"
 
   printf "  Exit status is the number of to-do list items displayed.\n"
