@@ -86,11 +86,15 @@ right_justify() {
 
 todo_add() {
   todo_ensure_file_exists
-  printf "* [ ] $*\n" >>"$(todo_filename)"
+  printf "* [ ] $*\n" >>$(
+    todo_filename
+  )
 }
 
 todo_edit() {
-  $EDITOR "$(todo_filename)"
+  $EDITOR $(
+    todo_filename
+  )
 }
 
 todo_ensure_file_exists() {
@@ -160,7 +164,9 @@ todo_help() {
   # Right-align a credit.
   local tag_line_length=${#PROGRAM_TAG_LINE}
   local url_length=${#PROGRAM_URL}
-  local space_length=$(($(tput cols) - $tag_line_length - $url_length))
+  local space_length=$((
+    $(tput cols) - $tag_line_length - $url_length
+  ))
   for i in $(seq 1 $space_length); do
     printf " "
   done
@@ -236,7 +242,9 @@ todo_items() {
       is_list_item "$line" || continue
 
       local item="$line"
-      local item_indent_width=$(indentation_width "$item")
+      local item_indent_width=$(
+        indentation_width "$item"
+      )
 
       # Discard unmatching siblings and younger relations in reverse order.
       while [ 0 -lt ${#unmatching_ancestors[*]} ]; do
@@ -244,7 +252,9 @@ todo_items() {
         if [ $item_indent_width -le $(indentation_width "$last_unmatching_ancestor") ]; then
           # Pop right.
           local unmatching_ancestors_count="${#unmatching_ancestors[*]}"
-          local unmatching_ancestors=("${unmatching_ancestors[@]::$unmatching_ancestors_count-1}")
+          local unmatching_ancestors=(
+            "${unmatching_ancestors[@]::$unmatching_ancestors_count-1}"
+          )
         else
           break
         fi
@@ -264,14 +274,17 @@ todo_items() {
           printf -- "${unmatching_ancestors[0]}\n"
 
           # Pop left.
-          local unmatching_ancestors=("${unmatching_ancestors[@]:1}")
+          local unmatching_ancestors=(
+            "${unmatching_ancestors[@]:1}"
+          )
         done
 
         printf -- "$item\n"
       else
         # Push right.
-        local unmatching_ancestors_count="${#unmatching_ancestors[*]}"
-        local unmatching_ancestors[$unmatching_ancestors_count]="$item"
+        unmatching_ancestors+=(
+          "$item"
+        )
       fi
     done <"$filename"
     IFS="$ifs_original"
@@ -287,7 +300,11 @@ todo_list() {
   if [ -z "$items" ]; then
     local item_count=0
   else
-    local item_count=$(($(printf -- "$items\n" | wc -l)))
+    local item_count=$((
+      $(
+        printf -- "$items\n" | wc -l
+      )
+    ))
     if [ 0 -lt $item_count ]; then
       todo_list_heading "$filter_arg" >&2
       printf -- "$items\n"
@@ -320,7 +337,9 @@ todo_list_heading() {
 
 todo_open() {
   todo_ensure_file_exists
-  open "$(todo_filename)"
+  open $(
+    todo_filename
+  )
 }
 
 case "$*" in
