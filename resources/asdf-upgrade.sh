@@ -26,7 +26,10 @@ function latest_v_of() {
   local current_v=$2
   local latest_v=$(asdf latest $tool)
   if [ -z "$latest_v" ]; then
-    local latest_v=$(asdf latest $tool $current_v)
+    local current_v_flav=$(
+      printf "$current_v\n" | grep --only-matching '[a-z]\+[-._a-z]*[a-z]\+'
+    )
+    local latest_v=$(asdf latest $tool $current_v_flav)
   fi
   printf "$latest_v\n"
 }
