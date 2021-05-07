@@ -3,6 +3,8 @@
 # set -Eeuo pipefail
 set -Euo pipefail
 
+FINAL_RELEASE_PATTERN="\b\d\+$"
+
 function handle_result() {
   local result=$1
   if [ $result -eq 0 ]; then
@@ -24,14 +26,13 @@ function handle_result() {
 function latest_v_of() {
   local tool=$1
   local current_v=$2
-  local latest_v=$(asdf latest $tool)
-  if [ -z "$latest_v" ]; then
-    local current_v_flav=$(
-      printf "$current_v\n" | grep --only-matching '[a-z]\+[-._a-z]*[a-z]\+'
-    )
-    local latest_v=$(asdf latest $tool $current_v_flav)
-  fi
-  printf "$latest_v\n"
+  local current_v_flav=$(
+    printf "$current_v\n" \
+      | grep --ignore-case --only-matching '[a-z]\+[-._a-z]*[a-z]\+'
+  )
+  asdf      latest $tool                 | grep $FINAL_RELEASE_PATTERN \
+    || asdf latest $tool $current_v_flav | grep $FINAL_RELEASE_PATTERN \
+    || asdf list-all $tool               | grep $FINAL_RELEASE_PATTERN | tail -1
 }
 
 function update_all_installed_tools() {
