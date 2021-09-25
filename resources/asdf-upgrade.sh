@@ -57,18 +57,6 @@ function update_all_installed_tools() {
   done
 }
 
-function update_asdf() {
-  printf "Updating \e[4masdf\e[24m ...\n"
-  printf "\e[2m"
-  asdf update
-  local result=$?
-  printf "\e[0m"
-  handle_result $result
-  if [ $result -eq 0 ]; then
-    printf "Successfully updated \e[4masdf\e[24m\n"
-  fi
-}
-
 function update_plugins() {
   printf "Updating plugins ...\n"
   printf "\e[2m"                                                  \
@@ -96,6 +84,5 @@ function update_tool_to_version() {
   fi
 }
 
-update_asdf
 update_plugins
 update_all_installed_tools
