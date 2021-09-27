@@ -114,7 +114,7 @@ function print_usage_and_die {
 
 function process_file {
   if [ $num1 -eq 1 ]; then
-    head -$num2 "$file"
+    head $head_and_tail_opts $num2 "$file"
   else
     file_size=$(($(wc $wc_opts <"$file")))
     if [ $num1 -le $file_size ]; then
