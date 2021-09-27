@@ -43,7 +43,7 @@ function parse_arguments {
         elif [ "$expecting_bytes_opt" == true ]; then
           num_opt="$argument"
           num_type=byte
-        elif [ -t 0 ] && [ -z "$file" ] && [ -f "$argument" ]; then
+        elif [ ! -p /dev/stdin ] && [ -z "$file" ] && [ -f "$argument" ]; then
           file="$argument"
         else
           print_usage_and_die
@@ -52,7 +52,7 @@ function parse_arguments {
         expecting_bytes_opt=""
         ;;
       *)
-        if [ -t 0 ] && [ -z "${file-}" ] && [ -f "$argument" ]; then
+        if [ ! -p /dev/stdin ] && [ -z "${file-}" ] && [ -f "$argument" ]; then
           file="$argument"
         else
           print_usage_and_die
@@ -63,7 +63,7 @@ function parse_arguments {
     esac
   done
 
-  if [ -t 0 ] && [ -z "${file-}" ]; then
+  if [ ! -p /dev/stdin ] && [ -z "${file-}" ]; then
     print_usage_and_die
   elif [ -z "${num_opt-}" ]; then
     print_usage_and_die
