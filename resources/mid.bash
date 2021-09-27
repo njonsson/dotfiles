@@ -24,23 +24,23 @@ function parse_arguments {
     case "$argument" in
       -[0-9]*)
         num_opt="${argument/-/}"
-        expecting_lines_opt=""
-        expecting_bytes_opt=""
+        expecting_lines_opt=0
+        expecting_bytes_opt=0
         num_type=line
         ;;
       -n)
-        expecting_lines_opt=true
-        expecting_bytes_opt=""
+        expecting_lines_opt=1
+        expecting_bytes_opt=0
         ;;
       -c)
-        expecting_bytes_opt=true
-        expecting_lines_opt=""
+        expecting_bytes_opt=1
+        expecting_lines_opt=0
         ;;
       [0-9]*)
-        if [ "$expecting_lines_opt" == true ]; then
+        if (( $expecting_lines_opt )); then
           num_opt="$argument"
           num_type=line
-        elif [ "$expecting_bytes_opt" == true ]; then
+        elif (( $expecting_bytes_opt )); then
           num_opt="$argument"
           num_type=byte
         elif [ ! -p /dev/stdin ] && [ -z "$file" ] && [ -f "$argument" ]; then
@@ -48,8 +48,8 @@ function parse_arguments {
         else
           print_usage_and_die
         fi
-        expecting_lines_opt=""
-        expecting_bytes_opt=""
+        expecting_lines_opt=0
+        expecting_bytes_opt=0
         ;;
       *)
         if [ ! -p /dev/stdin ] && [ -z "${file-}" ] && [ -f "$argument" ]; then
@@ -57,8 +57,8 @@ function parse_arguments {
         else
           print_usage_and_die
         fi
-        expecting_lines_opt=""
-        expecting_bytes_opt=""
+        expecting_lines_opt=0
+        expecting_bytes_opt=0
         ;;
     esac
   done
