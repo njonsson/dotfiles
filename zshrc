@@ -65,6 +65,9 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 # Enable IEx history.
 export ERL_AFLAGS="-kernel shell_history enabled"
 
+# Accommodate Homebrew-installed asdf.
+. $(brew --prefix asdf)/asdf.sh
+
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 
