@@ -58,14 +58,14 @@ function process_stdin() {
 }
 
 function usage() {
-  printf "Usage: \e[1m$(basename $0) \e[22;4mYYYY\e[24;1m-\e[22;4mMM\e[24;1m-\e[22;4mDD\e[24;1mT\e[22;4mhh\e[24;1m:\e[22;4mmm\e[24;1m:\e[22;4mss\e[24;1mZ\e[22m\n"
-  printf "       \e[1m$(basename $0) \e[22;4mYYYY\e[24;1m-\e[22;4mMM\e[24;1m-\e[22;4mDD\e[24;1mT\e[22;4mhh\e[24;1m:\e[22;4mmm\e[24;1m:\e[22;4mss\e[24;1m.\e[22;4ms\e[24;1mZ\e[22m\n"
-  printf "       \e[1m$(basename $0) \e[22;4mYYYY\e[24;1m-\e[22;4mMM\e[24;1m-\e[22;4mDD\e[24;1mT\e[22;4mhh\e[24;1m:\e[22;4mmm\e[24;1m:\e[22;4mss\e[24;1m.\e[22;4mss\e[24;1mZ\e[22m\n"
-  printf "       \e[1m$(basename $0) \e[22;4mYYYY\e[24;1m-\e[22;4mMM\e[24;1m-\e[22;4mDD\e[24;1mT\e[22;4mhh\e[24;1m:\e[22;4mmm\e[24;1m:\e[22;4mss\e[24;1m.\e[22;4msss\e[24;1mZ\e[22m\n"
-  printf "       \e[1m$(basename $0) \e[22;4mYYYYMMDD\e[24;1mT\e[22;4mhhmmss\e[24;1mZ\e[22m\n"
-  printf "       \e[1m$(basename $0) \e[22;4mYYYYMMDD\e[24;1mT\e[22;4mhhmmss\e[24;1m.\e[22;4ms\e[24;1mZ\e[22m\n"
-  printf "       \e[1m$(basename $0) \e[22;4mYYYYMMDD\e[24;1mT\e[22;4mhhmmss\e[24;1m.\e[22;4mss\e[24;1mZ\e[22m\n"
-  printf "       \e[1m$(basename $0) \e[22;4mYYYYMMDD\e[24;1mT\e[22;4mhhmmss\e[24;1m.\e[22;4msss\e[24;1mZ\e[22m\n"
+  printf "Usage: \e[1m$(basename $0) \e[22;4mYYYY\e[24;1m-\e[22;4mMM\e[24;1m-\e[22;4mDD\e[24;1mT\e[22;4mhh\e[24;1m:\e[22;4mmm\e[24;1m:\e[22;4mss\e[24;1mZ\e[22m\n"                     >&2
+  printf "       \e[1m$(basename $0) \e[22;4mYYYY\e[24;1m-\e[22;4mMM\e[24;1m-\e[22;4mDD\e[24;1mT\e[22;4mhh\e[24;1m:\e[22;4mmm\e[24;1m:\e[22;4mss\e[24;1m.\e[22;4ms\e[24;1mZ\e[22m\n"   >&2
+  printf "       \e[1m$(basename $0) \e[22;4mYYYY\e[24;1m-\e[22;4mMM\e[24;1m-\e[22;4mDD\e[24;1mT\e[22;4mhh\e[24;1m:\e[22;4mmm\e[24;1m:\e[22;4mss\e[24;1m.\e[22;4mss\e[24;1mZ\e[22m\n"  >&2
+  printf "       \e[1m$(basename $0) \e[22;4mYYYY\e[24;1m-\e[22;4mMM\e[24;1m-\e[22;4mDD\e[24;1mT\e[22;4mhh\e[24;1m:\e[22;4mmm\e[24;1m:\e[22;4mss\e[24;1m.\e[22;4msss\e[24;1mZ\e[22m\n" >&2
+  printf "       \e[1m$(basename $0) \e[22;4mYYYYMMDD\e[24;1mT\e[22;4mhhmmss\e[24;1mZ\e[22m\n"                                                                                         >&2
+  printf "       \e[1m$(basename $0) \e[22;4mYYYYMMDD\e[24;1mT\e[22;4mhhmmss\e[24;1m.\e[22;4ms\e[24;1mZ\e[22m\n"                                                                       >&2
+  printf "       \e[1m$(basename $0) \e[22;4mYYYYMMDD\e[24;1mT\e[22;4mhhmmss\e[24;1m.\e[22;4mss\e[24;1mZ\e[22m\n"                                                                      >&2
+  printf "       \e[1m$(basename $0) \e[22;4mYYYYMMDD\e[24;1mT\e[22;4mhhmmss\e[24;1m.\e[22;4msss\e[24;1mZ\e[22m\n"                                                                     >&2
 }
 
 if [ -p /dev/stdin ]; then
