@@ -23,6 +23,7 @@
 	sum = "!PAGER=cat git show HEAD --format=format:%h%n --no-patch"
 	touch = "!git commit --amend --date=\"`date`\" --no-edit" $*
 [push]
+	autoSetupRemote = true
 	default = simple
 [core]
 	excludesfile = /Users/nils/.gitignore_global
