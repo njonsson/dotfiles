@@ -47,6 +47,7 @@ setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording en
 setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
 setopt HIST_BEEP                 # Beep when accessing nonexistent history.
 
+alias brew-upgrade='brew upgrade && brew upgrade --cask $(brew list --cask)'
 alias git='noglob git'
 alias rake='noglob rake'
 alias rspec='nocorrect rspec'
