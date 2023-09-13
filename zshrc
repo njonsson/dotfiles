@@ -44,8 +44,8 @@ setopt HIST_FIND_NO_DUPS         # Do not display a line previously found.
 setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
 setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
 setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
-setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
 setopt HIST_BEEP                 # Beep when accessing nonexistent history.
+unsetopt HIST_VERIFY             # Don't do history expansion before executing.
 
 alias brew-upgrade='brew upgrade && brew upgrade --cask $(brew list --cask)'
 alias git='noglob git'
