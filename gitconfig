@@ -20,7 +20,7 @@
 	current-branch = rev-parse --abbrev-ref HEAD
 	lg = log --abbrev-commit --decorate --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
 	spring-cleaning = for-each-ref --format='%(refname:short) ... %(committerdate:short)' --sort=-committerdate
-	sum = "!PAGER=cat git show HEAD --format=format:%H%n --no-patch"
+	sum = "!PAGER=cat git show --format=format:%H%n --no-patch"
 	touch = "!git commit --amend --date=\"`date`\" --no-edit" $*
 [push]
 	autoSetupRemote = true
