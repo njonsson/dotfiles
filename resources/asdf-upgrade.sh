@@ -53,7 +53,7 @@ function update_all_installed_tools() {
       continue
     fi
 
-    update_tool_to_version $tool $latest_v
+    update_tool_to_version $tool $latest_v $current_v
   done
 }
 
@@ -71,16 +71,17 @@ function update_plugins() {
 
 function update_tool_to_version() {
   tool=$1
-  v=$2
-  printf "Installing \e[4m$tool\e[24m \e[4m$v\e[24m ...\n"
+  to_v=$2
+  from_v=$3
+  printf "Updating \e[4m$tool\e[24m from \e[4m$from_v\e[24m to \e[4m$to_v\e[24m ...\n"
   printf "\e[2m"
-  asdf install $tool $v \
-    && asdf global $tool $v
+  asdf install $tool $to_v \
+    && asdf global $tool $to_v
   local result=$?
   printf "\e[0m"
   handle_result $result
   if [ $result -eq 0 ]; then
-    printf "Successfully installed \e[4m$tool\e[24m \e[4m$v\e[24m\n"
+    printf "Successfully updated \e[4m$tool\e[24m from \e[4m$from_v\e[24m to \e[4m$to_v\e[24m\n"
   fi
 }
 
