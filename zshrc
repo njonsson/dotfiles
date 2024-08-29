@@ -69,6 +69,9 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 # Enable IEx history.
 export ERL_AFLAGS="-kernel shell_history enabled"
 
+# Enable tool installations via mise-en-place (formerly RTX).
+eval "$($(brew --prefix mise)/bin/mise activate zsh)"
+
 todo_list_incomplete_if_filename_changed() {
   if [ "$(todo --filename)" != "${_TODO_FILENAME_PREVIOUS-}" ]; then
     export _TODO_FILENAME_PREVIOUS=$(
