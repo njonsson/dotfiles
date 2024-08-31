@@ -66,15 +66,6 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 # Enable IEx history.
 export ERL_AFLAGS="-kernel shell_history enabled"
 
-# Accommodate Homebrew-installed asdf.
-. $(brew --prefix asdf)/libexec/asdf.sh
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
-
-# Enable asdf.
-. /usr/local/opt/asdf/libexec/asdf.sh
-
 todo_list_incomplete_if_filename_changed() {
   if [ "$(todo --filename)" != "${_TODO_FILENAME_PREVIOUS-}" ]; then
     export _TODO_FILENAME_PREVIOUS=$(
