@@ -61,6 +61,10 @@ export GEM_OPEN_EDITOR="$EDITOR"
 export GOPATH="$HOME/golang"
 export PATH="$GOPATH/bin:$PATH"
 
+# Use tools installed by mise-en-place (mise).
+eval "$(mise activate)"
+alias asdf='printf "Use \e[4mmise\e[24m instead\n"'
+
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # Enable IEx history.
