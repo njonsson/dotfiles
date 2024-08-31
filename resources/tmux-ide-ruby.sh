@@ -2,7 +2,9 @@
 
 set -Eeuo pipefail
 
-me=`basename $0`
+me=$(
+  basename $0
+)
 case $@ in
   "--help"|"-h" )
     echo Usage:
@@ -39,7 +41,9 @@ if [ $bundler ]; then
   bundle_exec="bundle exec"
 fi
 
-session_name=`basename $(pwd)`
+session_name=$(
+  basename $(pwd)
+)
 tmux_cmd="tmux -S $TMUX_SESSIONS_PATH/$session_name"
 $tmux_cmd new-session -s $session_name -d
 
@@ -64,7 +68,11 @@ fi
 if [ -d app ] && [ -d config ] && [ -d db ]; then
   echo "* Detected Rails project"
 
-  server_env_opt=`if [ $SERVER_RAILS_ENV ]; then echo " -e $SERVER_RAILS_ENV"; fi`
+  server_env_opt=$(
+    if [ $SERVER_RAILS_ENV ]; then
+      echo " -e $SERVER_RAILS_ENV"
+    fi
+  )
 
   $tmux_cmd new-window -t $session_name -n 'web server'
   $tmux_cmd send-keys -t $session_name:2 "$bundle_exec rails server$server_env_opt || $bundle_exec script/server$server_env_opt" C-m

@@ -2,7 +2,9 @@
 
 set -Eeuo pipefail
 
-me=`basename $0`
+me=$(
+  basename $0
+)
 case $@ in
   "--help"|"-h" )
     echo Usage:
@@ -21,7 +23,9 @@ esac
 
 echo Setting up tmux IDE for Elixir
 
-session_name=`basename $(pwd)`
+session_name=$(
+  basename $(pwd)
+)
 RUN_TESTS_SCRIPT=/tmp/$me-run-tests-for-$session_name
 tmux_cmd="tmux -S $TMUX_SESSIONS_PATH/$session_name"
 $tmux_cmd new-session -s $session_name -d
@@ -32,12 +36,16 @@ $tmux_cmd send-keys -t $session_name:1.1 C-m 'vim .' C-m
 $tmux_cmd split-window -h -p 40 -t $session_name:1.1
 
 if [ -d spec ]; then
-  espec_files_count="`find spec -name '*.ex' -o -name '*.exs' | wc -l`"
+  espec_files_count=$(
+    find spec -name '*.ex' -o -name '*.exs' | wc -l
+  )
 else
   espec_files_count=0
 fi
 if [ -d test ]; then
-  exunit_files_count="`find test -name '*.ex' -o -name '*.exs' | wc -l`"
+  exunit_files_count=$(
+    find test -name '*.ex' -o -name '*.exs' | wc -l
+  )
 else
   exunit_files_count=0
 fi

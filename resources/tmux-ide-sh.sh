@@ -2,7 +2,9 @@
 
 set -Eeuo pipefail
 
-me=`basename $0`
+me=$(
+  basename $0
+)
 case $@ in
   "--help"|"-h" )
     echo Usage:
@@ -21,7 +23,9 @@ esac
 
 echo Setting up tmux IDE for shell programming
 
-session_name=`basename $(pwd)`
+session_name=$(
+  basename $(pwd)
+)
 tmux_cmd="tmux -S $TMUX_SESSIONS_PATH/$session_name"
 $tmux_cmd new-session -s $session_name -d
 

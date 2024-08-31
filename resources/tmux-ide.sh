@@ -20,11 +20,22 @@ else
   fi
 fi
 
-clojure_files_count=`   find . -name '*.clj'                              | wc -l`
-elixir_files_count=`    find . -name '*.ex' -o -name '*.exs'              | wc -l`
-javascript_files_count=`find . -name '*.js' -not -path "./node_modules/*" | wc -l`
-ruby_files_count=`      find . -name '*.rb'                               | wc -l`
-sh_files_count=`        find . -name '*.sh'                               | wc -l`
+clojure_files_count=$(
+  find . -name '*.clj' | wc -l
+)
+elixir_files_count=$(
+  find . -name '*.ex' -o -name '*.exs' | wc -l
+)
+javascript_files_count=$(
+  find . -name '*.[jt]s' -o -name '*.[jt]sx' -not -path './node_modules/*' \
+    | wc -l
+)
+ruby_files_count=$(
+  find . -name '*.rb' | wc -l
+)
+sh_files_count=$(
+  find . -name '*.sh' | wc -l
+)
 if [ $elixir_files_count     -lt $clojure_files_count ] &&
    [ $javascript_files_count -lt $clojure_files_count ] &&
    [ $ruby_files_count       -lt $clojure_files_count ] &&
