@@ -178,6 +178,7 @@ todo_help() {
   printf "\n"
 
   printf "    \e[1m$PROGRAM 'Something to do'\e[22m   Adds \e[4mSomething to do\e[24m as a new, incomplete item in the to-do list\n"
+  printf "    \e[1m$PROGRAM Something else\e[22m      Adds \e[4mSomething else\e[24m as a new, incomplete item in the to-do list\n"
   printf "\n"
 
   printf "    \e[1m$PROGRAM --edit\e[22m              Opens the to-do list file in your \e[1m\$EDITOR\e[22m, \e[4m$EDITOR\e[24m\n"
