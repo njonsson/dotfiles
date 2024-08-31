@@ -213,7 +213,7 @@ todo_help() {
   printf "  Existing to-do list files in the current directory take precedence over ones in \e[4m~/\e[24m.\n"
   printf "\n"
 
-  printf "  To-do list files are detected in a directory if their names:\n"
+  printf "  The names of detected to-do list files:\n"
   printf "\n"
   printf "    • Are \e[4mtodo.md\e[24m or \e[4mtodo.markdown\e[24m, or\n"
   printf "    • Are \e[4mTODO.md\e[24m or \e[4mTODO.markdown\e[24m, or\n"
