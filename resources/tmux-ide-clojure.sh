@@ -32,7 +32,7 @@ $tmux_cmd new-session -s $session_name -d
 $tmux_cmd rename-window -t $session_name:1 'code/test'
 $tmux_cmd send-keys -t $session_name:1.1 C-m 'vim .' C-m
 
-$tmux_cmd split-window -h -p 40 -t $session_name:1.1
+$tmux_cmd split-window -h -l 40% -t $session_name:1.1
 
 $tmux_cmd new-window -t $session_name -n REPL
 $tmux_cmd send-keys -t $session_name:2 "lein repl" C-m

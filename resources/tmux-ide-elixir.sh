@@ -33,7 +33,7 @@ $tmux_cmd new-session -s $session_name -d
 $tmux_cmd rename-window -t $session_name:1 'code/test'
 $tmux_cmd send-keys -t $session_name:1.1 C-m 'vim .' C-m
 
-$tmux_cmd split-window -h -p 40 -t $session_name:1.1
+$tmux_cmd split-window -h -l 40% -t $session_name:1.1
 
 if [ -d spec ]; then
   espec_files_count=$(
@@ -109,7 +109,7 @@ chmod u+x $RUN_TESTS_SCRIPT
 
 $tmux_cmd send-keys -t $session_name:1.2 "clear; $RUN_TESTS_SCRIPT" C-m
 
-$tmux_cmd split-window -v -p 40 -t $session_name:1.2
+$tmux_cmd split-window -v -l 40% -t $session_name:1.2
 
 if [ -d lib ] && [ -d priv ] && [ -d web ]; then
   echo "* Detected Phoenix project"

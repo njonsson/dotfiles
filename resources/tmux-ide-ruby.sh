@@ -50,7 +50,7 @@ $tmux_cmd new-session -s $session_name -d
 $tmux_cmd rename-window -t $session_name:1 'code/test'
 $tmux_cmd send-keys -t $session_name:1.1 C-m 'vim .' C-m
 
-$tmux_cmd split-window -h -p 40 -t $session_name:1.1
+$tmux_cmd split-window -h -l 40% -t $session_name:1.1
 
 guard=''
 if [ -e Guardfile ]; then
@@ -62,7 +62,7 @@ fi
 if [ $guard ]; then
   echo "* Detected Guard configuration"
   $tmux_cmd send-keys -t $session_name:1.2 "$bundle_exec guard" C-m
-  $tmux_cmd split-window -v -p 40 -t $session_name:1.2
+  $tmux_cmd split-window -v -l 40% -t $session_name:1.2
 fi
 
 if [ -d app ] && [ -d config ] && [ -d db ]; then
