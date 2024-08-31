@@ -172,39 +172,41 @@ todo_help() {
   done
   unset i
   printf "\e[2;4m$PROGRAM_URL\e[24;22m\n"
-
   printf "\n"
 
-  printf "  \e[1m$PROGRAM 'Something to do'\e[22m   Adds \e[4mSomething to do\e[24m as a new, incomplete item in the to-do list\n"
+  printf "  Usage:\n"
   printf "\n"
 
-  printf "  \e[1m$PROGRAM --edit\e[22m              Opens the to-do list file in your \e[1m\$EDITOR\e[22m, \e[4m$EDITOR\e[24m\n"
-  printf "  \e[1m$PROGRAM -e\e[22m\n"
-  printf "  \e[1m$PROGRAM\e[22m\n"
+  printf "    \e[1m$PROGRAM 'Something to do'\e[22m   Adds \e[4mSomething to do\e[24m as a new, incomplete item in the to-do list\n"
   printf "\n"
 
-  printf "  \e[1m$PROGRAM --filename\e[22m          Displays the to-do list filename\n"
-  printf "  \e[1m$PROGRAM -f\e[22m\n"
+  printf "    \e[1m$PROGRAM --edit\e[22m              Opens the to-do list file in your \e[1m\$EDITOR\e[22m, \e[4m$EDITOR\e[24m\n"
+  printf "    \e[1m$PROGRAM -e\e[22m\n"
+  printf "    \e[1m$PROGRAM\e[22m\n"
   printf "\n"
 
-  printf "  \e[1m$PROGRAM --list\e[22m              Lists all to-do items\n"
-  printf "  \e[1m$PROGRAM -l\e[22m\n"
+  printf "    \e[1m$PROGRAM --filename\e[22m          Displays the to-do list filename\n"
+  printf "    \e[1m$PROGRAM -f\e[22m\n"
   printf "\n"
 
-  printf "  \e[1m$PROGRAM --list-completed\e[22m    Lists completed to-do items\n"
-  printf "  \e[1m$PROGRAM -c\e[22m\n"
+  printf "    \e[1m$PROGRAM --list\e[22m              Lists all to-do items\n"
+  printf "    \e[1m$PROGRAM -l\e[22m\n"
   printf "\n"
 
-  printf "  \e[1m$PROGRAM --list-incomplete\e[22m   Lists incomplete to-do items\n"
-  printf "  \e[1m$PROGRAM -i\e[22m\n"
+  printf "    \e[1m$PROGRAM --list-completed\e[22m    Lists completed to-do items\n"
+  printf "    \e[1m$PROGRAM -c\e[22m\n"
   printf "\n"
 
-  printf "  \e[1m$PROGRAM --open\e[22m              Opens the to-do list file in the application associated with it\n"
-  printf "  \e[1m$PROGRAM -o\e[22m\n"
+  printf "    \e[1m$PROGRAM --list-incomplete\e[22m   Lists incomplete to-do items\n"
+  printf "    \e[1m$PROGRAM -i\e[22m\n"
   printf "\n"
 
-  printf "  \e[1m$PROGRAM --help\e[22m              Displays this help message\n"
-  printf "  \e[1m$PROGRAM -h\e[22m\n"
+  printf "    \e[1m$PROGRAM --open\e[22m              Opens the to-do list file in the application associated with it\n"
+  printf "    \e[1m$PROGRAM -o\e[22m\n"
+  printf "\n"
+
+  printf "    \e[1m$PROGRAM --help\e[22m              Displays this help message\n"
+  printf "    \e[1m$PROGRAM -h\e[22m\n"
   printf "\n"
 
   printf "  Existing to-do list files in the current directory take precedence over ones in \e[4m~/\e[24m.\n"
