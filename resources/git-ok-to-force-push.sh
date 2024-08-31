@@ -1,6 +1,6 @@
 #! /usr/bin/env sh
 
-set -Eeuo pipefail
+set -Euo pipefail
 
 display_usage() {
   printf "Usage: $(basename $0) [--help|-h] [--verbose|-v] [REMOTE] [BRANCH]\n"

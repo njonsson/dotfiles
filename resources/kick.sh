@@ -1,6 +1,6 @@
 #! /usr/bin/env sh
 
-set -Eeuo pipefail
+set -Euo pipefail
 
 arguments=("$@")
 arguments_count=$#
