@@ -49,6 +49,7 @@ unsetopt HIST_VERIFY             # Don't do history expansion before executing.
 
 alias brew-upgrade='brew upgrade && brew upgrade --cask $(brew list --cask)'
 alias git='noglob git'
+alias ping='ping -A --apple-time'
 alias rake='noglob rake'
 alias rspec='nocorrect rspec'
 alias tmux='nocorrect tmux'
