@@ -1,5 +1,6 @@
 require 'erb'
 
+DOTFILES_SENTINEL_FILENAME = '.DOTFILES'
 HOME = ENV['HOME']
 
 def delete_if_exists(file)
@@ -45,6 +46,13 @@ end
 
 def info(message)
   puts "*** #{message}"
+end
+
+def relative_name(path)
+  File.expand_path(path).sub(
+    /^#{Regexp.escape File.expand_path(File.dirname(__FILE__))}\/?/,
+    ''
+  )
 end
 
 def short_name(path)
@@ -102,15 +110,31 @@ namespace :set_up do
 
   desc 'Generate or symlink dotfiles into ~'
   task :dotfiles => :update_git_submodules do
-    Dir.glob("#{File.dirname __FILE__}/*") do |entry|
-      if File.directory?(entry)                                  ||
-         (File.expand_path(entry) == File.expand_path(__FILE__)) ||
+    non_dotfiles_dirs_relative = []
+    Dir.glob("#{File.dirname __FILE__}/**/*") do |entry|
+      relative_entry = relative_name(entry)
+      next if non_dotfiles_dirs_relative.find do |relative_dir|
+        relative_entry.start_with?("#{relative_dir}/")
+      end
+
+      if (File.directory?(entry) && !File.exist?("#{entry}/#{DOTFILES_SENTINEL_FILENAME}"))
+        warning "Ignoring #{short_name entry}/ because it does not contain a #{DOTFILES_SENTINEL_FILENAME} file"
+        non_dotfiles_dirs_relative  << relative_entry
+        next
+      end
+
+      if (File.expand_path(entry) == File.expand_path(__FILE__)) ||
          (File.extname(entry).downcase == '.markdown')
         next
       end
 
-      generate_or_symlink entry do |source|
-        "#{HOME}/.#{File.basename source}"
+      if File.directory?(entry)
+        system("mkdir -p #{HOME}/.#{relative_entry}")
+        next
+      end
+
+      generate_or_symlink relative_entry do |source|
+        "#{HOME}/.#{source}"
       end
     end
   end
