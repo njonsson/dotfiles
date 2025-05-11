@@ -1,5 +1,7 @@
 require 'erb'
 
+HOME = ENV['HOME']
+
 def delete_if_exists(file)
   if File.exist?(file) || File.symlink?(file)
     if @force
@@ -46,7 +48,7 @@ def info(message)
 end
 
 def short_name(path)
-  relative_name(path).sub(/^#{Regexp.escape ENV['HOME']}/, '~')
+  relative_name(path).sub(/^#{Regexp.escape HOME}/, '~')
     .sub(/^([^~])/, './\\1')
 end
 
@@ -81,14 +83,14 @@ namespace :set_up do
 
   desc 'Generate or symlink scripts into ~/bin'
   task :bin do
-    target_dir = "#{ENV['HOME']}/bin"
+    target_dir = "#{HOME}/bin"
     fail unless system("mkdir -p #{target_dir}")
 
     pattern = "#{File.expand_path File.dirname(__FILE__)}/resources/*.{bash,rb,sh}"
     Dir.glob(pattern) do |script|
       generate_or_symlink script do |source|
         source_basename = File.basename(source, File.extname(source))
-        "#{ENV['HOME']}/bin/#{source_basename}"
+        "#{HOME}/bin/#{source_basename}"
       end
     end
   end
@@ -108,7 +110,7 @@ namespace :set_up do
       end
 
       generate_or_symlink entry do |source|
-        "#{ENV['HOME']}/.#{File.basename source}"
+        "#{HOME}/.#{File.basename source}"
       end
     end
   end
@@ -120,7 +122,7 @@ namespace :set_up do
 
   desc 'Copy fonts into ~/Library/Fonts'
   task :fonts do
-    target_dir = "#{ENV['HOME']}/Library/Fonts"
+    target_dir = "#{HOME}/Library/Fonts"
     fail unless system("mkdir -p #{target_dir}")
 
     pattern = "#{File.expand_path File.dirname(__FILE__)}/resources/*.[ot]tf"
