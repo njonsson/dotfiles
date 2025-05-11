@@ -46,8 +46,8 @@ def info(message)
 end
 
 def short_name(path)
-  File.expand_path(path).gsub(/^#{Regexp.escape File.expand_path(File.dirname(__FILE__))}\/?/, '').
-                         gsub(/^#{Regexp.escape ENV['HOME']}/,                                 '~')
+  relative_name(path).sub(/^#{Regexp.escape ENV['HOME']}/, '~')
+    .sub(/^([^~])/, './\\1')
 end
 
 def success(message)
