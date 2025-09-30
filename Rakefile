@@ -111,7 +111,7 @@ namespace :set_up do
   desc 'Generate or symlink dotfiles into ~'
   task :dotfiles => :update_git_submodules do
     non_dotfiles_dirs_relative = []
-    Dir.glob("#{File.dirname __FILE__}/**/*") do |entry|
+    Dir.glob("#{File.expand_path File.dirname(__FILE__)}/**/*") do |entry|
       relative_entry = relative_name(entry)
       next if non_dotfiles_dirs_relative.find do |relative_dir|
         relative_entry.start_with?("#{relative_dir}/")
@@ -133,8 +133,9 @@ namespace :set_up do
         next
       end
 
-      generate_or_symlink relative_entry do |source|
-        "#{HOME}/.#{source}"
+      generate_or_symlink entry do |source|
+        source_basename = File.basename(source, File.extname(source))
+        "#{HOME}/.#{source_basename}"
       end
     end
   end
