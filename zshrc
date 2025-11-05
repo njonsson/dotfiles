@@ -48,6 +48,7 @@ setopt HIST_BEEP                 # Beep when accessing nonexistent history.
 unsetopt HIST_VERIFY             # Don't do history expansion before executing.
 
 alias git='noglob git'
+alias gitx='/Applications/GitX.app/Contents/Resources/gitx'
 alias ping='ping -A --apple-time'
 alias rake='noglob rake'
 alias rspec='nocorrect rspec'
