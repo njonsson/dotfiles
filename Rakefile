@@ -2,14 +2,17 @@ require 'erb'
 
 DOTFILES_SENTINEL_FILENAME = '.DOTFILES'
 HOME = ENV['HOME']
+TARGET_DIR_BIN = "#{HOME}/bin"
+TARGET_DIR_DOTFILES = HOME
+TARGET_DIR_FONTS = "#{HOME}/Library/Fonts"
 
 def delete_if_exists(file)
   if File.exist?(file) || File.symlink?(file)
     if @force
       File.delete file
-      info "Deleted #{short_name file}"
+      info "Deleted #{underscore(short_name(file))}"
     else
-      warning "Not replacing existing #{short_name file}"
+      warning "Not replacing existing #{underscore(short_name(file))}"
       return false
     end
   end
@@ -28,7 +31,7 @@ def generate_or_symlink(source)
     File.open target, 'w' do |f|
       f.write ERB.new(File.read(source)).result
     end
-    success "Generated #{short_name target} from #{short_name source}"
+    success "Generated #{underscore(short_name(target))} from #{underscore(short_name(source))}"
   else
     target = yield(source)
     return unless delete_if_exists(target)
@@ -37,9 +40,9 @@ def generate_or_symlink(source)
     rescue NotImplementedError
       warning 'Symlinks are not supported on your system'
       return unless system("cp #{source} #{target}")
-      success "Copied to #{short_name target} from #{short_name source}"
+      success "Copied to #{underscore(short_name(target))} from #{underscore(short_name(source))}"
     else
-      success "Symlinked #{short_name target} to #{short_name source}"
+      success "Symlinked #{underscore(short_name(target))} to #{underscore(short_name(source))}"
     end
   end
 end
@@ -62,6 +65,10 @@ end
 
 def success(message)
   puts "\x1b[32m*** #{message}\x1b[0m"
+end
+
+def underscore(str)
+  "\e[4m#{str}\e[24m"
 end
 
 def warning(message)
@@ -89,16 +96,15 @@ namespace :set_up do
     task :force => [:set_force_option, 'set_up:all']
   end
 
-  desc 'Generate or symlink scripts into ~/bin'
+  desc "Generate or symlink scripts into #{underscore(short_name(TARGET_DIR_BIN) + '/')}"
   task :bin do
-    target_dir = "#{HOME}/bin"
-    fail unless system("mkdir -p #{target_dir}")
+    fail unless system("mkdir -p #{TARGET_DIR_BIN}")
 
     pattern = "#{File.expand_path File.dirname(__FILE__)}/resources/*.{bash,rb,sh}"
     Dir.glob(pattern) do |script|
       generate_or_symlink script do |source|
         source_basename = File.basename(source, File.extname(source))
-        "#{HOME}/bin/#{source_basename}"
+        "#{TARGET_DIR_BIN}/#{source_basename}"
       end
     end
   end
@@ -108,7 +114,7 @@ namespace :set_up do
     task :force => [:set_force_option, 'set_up:bin']
   end
 
-  desc 'Generate or symlink dotfiles into ~'
+  desc "Generate or symlink dotfiles into #{underscore(short_name(TARGET_DIR_DOTFILES) + '/')}"
   task :dotfiles => :update_git_submodules do
     non_dotfiles_dirs_relative = []
     Dir.glob("#{File.expand_path File.dirname(__FILE__)}/**/*") do |entry|
@@ -118,7 +124,7 @@ namespace :set_up do
       end
 
       if (File.directory?(entry) && !File.exist?("#{entry}/#{DOTFILES_SENTINEL_FILENAME}"))
-        warning "Ignoring #{short_name entry}/ because it does not contain a #{DOTFILES_SENTINEL_FILENAME} file"
+        warning "Ignoring #{underscore(short_name(entry) + '/')} because it does not contain a #{underscore(DOTFILES_SENTINEL_FILENAME)} file"
         non_dotfiles_dirs_relative  << relative_entry
         next
       end
@@ -129,13 +135,13 @@ namespace :set_up do
       end
 
       if File.directory?(entry)
-        system("mkdir -p #{HOME}/.#{relative_entry}")
+        system("mkdir -p #{TARGET_DIR_DOTFILES}/.#{relative_entry}")
         next
       end
 
       generate_or_symlink entry do |source|
         source_basename = File.basename(source, File.extname(source))
-        "#{HOME}/.#{source_basename}"
+        "#{TARGET_DIR_DOTFILES}/.#{source_basename}"
       end
     end
   end
@@ -145,20 +151,19 @@ namespace :set_up do
     task :force => [:set_force_option, 'set_up:dotfiles']
   end
 
-  desc 'Copy fonts into ~/Library/Fonts'
+  desc "Copy fonts into \e[4m#{short_name TARGET_DIR_FONTS}/\e[24m"
   task :fonts do
-    target_dir = "#{HOME}/Library/Fonts"
-    fail unless system("mkdir -p #{target_dir}")
+    fail unless system("mkdir -p #{TARGET_DIR_FONTS}")
 
     pattern = "#{File.expand_path File.dirname(__FILE__)}/resources/*.[ot]tf"
     Dir.glob(pattern) do |font|
       next unless File.file?(font)
 
-      target = "#{target_dir}/#{File.basename font}"
+      target = "#{TARGET_DIR_FONTS}/#{File.basename font}"
       next unless delete_if_exists(target)
 
       return unless system("cp #{font} #{target}")
-      success "Copied to #{short_name target} from #{short_name font}"
+      success "Copied to #{underscore(short_name(target))} from #{underscore(short_name(font))}"
     end
   end
 
