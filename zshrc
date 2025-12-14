@@ -162,3 +162,7 @@ todo_list_incomplete_if_filename_changed() {
 }
 export PROMPT_COMMAND=todo_list_incomplete_if_filename_changed
 precmd() { eval "$PROMPT_COMMAND" } # Workaround for zsh.
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/nils.jonsson/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
