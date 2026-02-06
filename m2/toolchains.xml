@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF8"?>
+<toolchains>
+    <!-- JDK toolchains -->
+    <toolchain>
+        <type>jdk</type>
+        <provides>
+            <version>17</version>
+        </provides>
+        <configuration>
+          <jdkHome>/Users/nils.jonsson/.local/share/mise/installs/java/17</jdkHome>
+        </configuration>
+    </toolchain>
+</toolchains>
