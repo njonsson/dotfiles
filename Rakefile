@@ -75,6 +75,17 @@ def warning(message)
   puts "\x1b[31m*** #{message}\x1b[0m"
 end
 
+def which_or_install(command:, command_name: command, advice:)
+  path_to_command = `which #{command}`.chomp
+  if $?.success?
+    success "Found #{command_name} at #{underscore(path_to_command)}"
+    return true
+  end
+
+  warn advice
+  false
+end
+
 task :default => 'set_up:all'
 
 desc 'Perform all setup tasks without overwriting existing files'
@@ -89,7 +100,7 @@ task :set_up => 'set_up:all'
 
 namespace :set_up do
   desc 'Perform all setup tasks without overwriting existing files'
-  task :all => [:bin, :dotfiles, :fonts]
+  task :all => [:bin, :dotfiles, :fonts, :nix, 'nix:packages']
 
   namespace :all do
     desc 'Perform all setup tasks, replacing files as necessary'
@@ -124,7 +135,7 @@ namespace :set_up do
       end
 
       if (File.directory?(entry) && !File.exist?("#{entry}/#{DOTFILES_SENTINEL_FILENAME}"))
-        warning "Ignoring #{underscore(short_name(entry) + '/')} because it does not contain a #{underscore(DOTFILES_SENTINEL_FILENAME)} file"
+        info "Ignoring #{underscore(short_name(entry) + '/')} because it does not contain a #{underscore(DOTFILES_SENTINEL_FILENAME)} file"
         non_dotfiles_dirs_relative  << relative_entry
         next
       end
@@ -170,6 +181,55 @@ namespace :set_up do
   namespace :fonts do
     desc 'Set up fonts, replacing files as necessary'
     task :force => [:set_force_option, 'set_up:fonts']
+  end
+
+  desc 'Install Nix package manager'
+  task :nix do
+    which_or_install(
+      command: 'nix',
+      command_name: 'Nix',
+      advice: 'Nix is not installed. Try using https://determinate.systems/nix-installer'
+    )
+  end
+
+  namespace :nix do
+    NIX_PACKAGES = [
+      # display             Rake task   Nix package
+      # -----------------------------------------------------
+      ['Git',               :git,       'nixpkgs#git'],
+      ['GNU Privacy Guard', :gnupg,     'nixpkgs#gnupg'],
+      ['iTerm2',            :iterm2,    'nixpkgs#iterm2'],
+      ['Oh My Zsh',         :oh_my_zsh, 'nixpkgs#oh-my-zsh'],
+      ['Pandoc',            :pandoc,    'nixpkgs#pandoc'],
+      [underscore('tmux'),  :tmux,      'nixpkgs#tmux'],
+      [underscore('tree'),  :tree,      'nixpkgs#tree'],
+      ['Vim',               :vim,       'nixpkgs#vim'],
+    ]
+
+    desc 'Install all Nix packages'
+    task :packages => 'packages:all'
+
+    namespace :packages do
+      desc 'Install all Nix packages'
+      task :all => NIX_PACKAGES.map { |p| p[1] }
+
+      NIX_PACKAGES.each do |display, rake_task, nix_package|
+        desc "Install #{display} Nix package in current profile"
+        task rake_task => 'set_up:nix' do
+          `nix profile list | grep 'Name:' | grep #{nix_package.gsub('nixpkgs#', '')}`
+          if $?.success?
+            success "Found Nix package #{underscore(nix_package)} in current profile"
+          else
+            result = `nix profile add #{nix_package}`
+            if $?.success?
+              success "Installed Nix package #{underscore(nix_package)} in current profile"
+            else
+              fail result
+            end
+          end
+        end
+      end
+    end
   end
 end
 
