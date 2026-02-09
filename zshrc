@@ -120,6 +120,7 @@ setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording en
 setopt HIST_BEEP                 # Beep when accessing nonexistent history.
 unsetopt HIST_VERIFY             # Don't do history expansion before executing.
 
+alias brew-upgrade='brew upgrade && brew upgrade --cask $(brew list --cask)'
 alias git='noglob git'
 alias gitx='/Applications/GitX.app/Contents/Resources/gitx'
 alias pbpaste-html="osascript -e 'the clipboard as «class HTML»' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr(\$_,11,-3)))'"
@@ -137,16 +138,16 @@ export GEM_OPEN_EDITOR="$EDITOR"
 export GOPATH="$HOME/golang"
 export PATH="$GOPATH/bin:$PATH"
 
+# Use tools installed by mise-en-place (mise).
+eval "$(mise activate --shims)"
+
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # Enable IEx history.
 export ERL_AFLAGS="-kernel shell_history enabled"
 
 # Enable tool installations via mise-en-place (formerly RTX).
-eval "$(${HOME}/.local/bin/mise activate zsh)"
-
-# Use tools installed by mise-en-place (mise).
-eval "$(mise activate --shims)"
+eval "$($(brew --prefix mise)/bin/mise activate zsh)"
 
 todo_list_incomplete_if_filename_changed() {
   if [ "$(todo --filename)" != "${_TODO_FILENAME_PREVIOUS-}" ]; then
