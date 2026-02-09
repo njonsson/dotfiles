@@ -143,7 +143,7 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 export ERL_AFLAGS="-kernel shell_history enabled"
 
 # Enable tool installations via mise-en-place (formerly RTX).
-eval "$(mise activate zsh)"
+eval "$(${HOME}/.local/bin/mise activate zsh)"
 
 # Use tools installed by mise-en-place (mise).
 eval "$(mise activate --shims)"
