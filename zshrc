@@ -138,6 +138,9 @@ export GEM_OPEN_EDITOR="$EDITOR"
 export GOPATH="$HOME/golang"
 export PATH="$GOPATH/bin:$PATH"
 
+# Enable Codex shell completion.
+eval "$(codex completion zsh)"
+
 # Use tools installed by mise-en-place (mise).
 eval "$(mise activate --shims)"
 

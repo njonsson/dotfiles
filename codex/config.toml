@@ -1,0 +1,54 @@
+approval_policy = "on-failure"
+model_provider = "oca"
+preferred_auth_method = "apikey"
+model = "oca/gpt-5-codex"
+profile = "gpt-5-codex"
+sandbox_mode = "workspace-write"
+web_search_request = true
+
+trust_level = "trusted"
+
+[sandbox_workspace_write]
+# network_access = true
+# writable_roots = [ "/Users/nils.jonsson/.codex/skills" ]
+
+[model_providers.oca]
+base_url = "https://code-internal.aiservice.us-chicago-1.oci.oraclecloud.com/20250206/app/litellm"
+http_headers = { "client" = "codex-cli", "client-version" = "0" }
+model = "oca/gpt5"
+name = "Oracle Code Assist"
+wire_api = "responses"
+
+
+[profiles.gpt-4-1]
+model = "oca/gpt-4.1"
+model_provider = "oca"
+review_model = "oca/gpt-4.1"
+
+[profiles.gpt-5]
+model = "oca/gpt5"
+model_provider = "oca"
+review_model = "oca/gpt5"
+
+[profiles.gpt-5-2]
+model = "oca/gpt-5.2"
+model_provider = "oca"
+review_model = "oca/gpt-5.2"
+
+[profiles.gpt-5-codex]
+model = "oca/gpt-5-codex"
+model_provider = "oca"
+review_model = "oca/gpt-5-codex"
+personality = "pragmatic"
+
+[profiles.gpt-5-1-codex]
+model = "oca/gpt-5.1-codex"
+model_provider = "oca"
+review_model = "oca/gpt-5.1-codex"
+personality = "pragmatic"
+
+[profiles.gpt-5-1-codex-mini]
+model = "oca/gpt-5.1-codex-mini"
+model_provider = "oca"
+review_model = "oca/gpt-5.1-codex-mini"
+personality = "pragmatic"
