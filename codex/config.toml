@@ -1,11 +1,13 @@
-approval_policy = "on-failure"
+#:schema https://developers.openai.com/codex/config-schema.json
+
+approval_policy = "on-request"
 model_provider = "oca"
-preferred_auth_method = "apikey"
-model = "oca/gpt-5-codex"
+model = "oca/gpt-5-codex" # needed for VS Code because it ignores profile
 profile = "gpt-5-codex"
 sandbox_mode = "workspace-write"
-web_search_request = true
+web_search = "live"
 
+[projects."/Users/"]
 trust_level = "trusted"
 
 [sandbox_workspace_write]
@@ -18,7 +20,6 @@ http_headers = { "client" = "codex-cli", "client-version" = "0" }
 model = "oca/gpt5"
 name = "Oracle Code Assist"
 wire_api = "responses"
-
 
 [profiles.gpt-4-1]
 model = "oca/gpt-4.1"
@@ -51,4 +52,16 @@ personality = "pragmatic"
 model = "oca/gpt-5.1-codex-mini"
 model_provider = "oca"
 review_model = "oca/gpt-5.1-codex-mini"
+personality = "pragmatic"
+
+[profiles.gpt-5-1-codex-max]
+model = "oca/gpt-5.1-codex-max"
+model_provider = "oca"
+review_model = "oca/gpt-5.1-codex-max"
+personality = "pragmatic"
+
+[profiles.gpt-5-2-codex]
+model = "oca/gpt-5.2-codex"
+model_provider = "oca"
+review_model = "oca/gpt-5.2-codex"
 personality = "pragmatic"
