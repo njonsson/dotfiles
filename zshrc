@@ -138,6 +138,7 @@ export GEM_OPEN_EDITOR="$EDITOR"
 export GOPATH="$HOME/golang"
 export PATH="$GOPATH/bin:$PATH"
 export PATH="$HOME/Sources/kiab-cli/bin:$PATH"
+export PATH="$HOME/bin/sqlcl/bin:$PATH"
 
 # Enable Codex shell completion.
 eval "$(codex completion zsh)"
