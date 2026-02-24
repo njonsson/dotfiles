@@ -137,6 +137,7 @@ export EDITOR="/usr/bin/env vim"
 export GEM_OPEN_EDITOR="$EDITOR"
 export GOPATH="$HOME/golang"
 export PATH="$GOPATH/bin:$PATH"
+export PATH="$HOME/Sources/kiab-cli/bin:$PATH"
 
 # Enable Codex shell completion.
 eval "$(codex completion zsh)"
