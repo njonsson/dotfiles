@@ -7,7 +7,7 @@
             <version>17</version>
         </provides>
         <configuration>
-          <jdkHome>/Users/nils.jonsson/.local/share/mise/installs/java/17</jdkHome>
+          <jdkHome>/Users/nils.jonsson/.local/share/mise/installs/java/oracle-17.0.12</jdkHome>
         </configuration>
     </toolchain>
 </toolchains>
