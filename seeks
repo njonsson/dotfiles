@@ -1,0 +1,10 @@
+[dep]
+upgrade: ask
+user_email: nils.jonsson@oracle.com
+[bitbucket]
+username: nijonsso
+[templates]
+project: ODA
+repo: oda-seeks
+branch: master
+filepath: seeks_config/seeks_templates.conf

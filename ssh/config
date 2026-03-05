@@ -1,0 +1,2 @@
+Host *.ad1.r2 !bastion*.oracleiaas.com
+    ProxyCommand bash -c 'ssh $(ps -o args= $(ps -o ppid= $$) | grep -o -- " -v[v]*") -W %h:%p bastion-ad1.rb.us-phoenix-1.oci.oracleiaas.com'
