@@ -139,6 +139,8 @@ export GOPATH="$HOME/golang"
 export PATH="$GOPATH/bin:$PATH"
 export PATH="$HOME/Sources/kiab-cli/bin:$PATH"
 export PATH="$HOME/bin/sqlcl/bin:$PATH"
+export PIP_TIMEOUT=100
+export POETRY_REQUESTS_TIMEOUT=100
 
 # Enable Codex shell completion.
 eval "$(codex completion zsh)"
