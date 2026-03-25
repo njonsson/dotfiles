@@ -1,0 +1,28 @@
+oci:
+  region: us-ashburn-1
+  profile: DEFAULT
+kube_config_path: ${HOME}/.kube/config-caa-kubectx.yaml
+update_kubectx: true
+attempt_autossh: false
+artifactory_url: https://artifactory-builds.oci.oraclecorp.com/global-dev-pypi/caa-kubectx/
+pypi_index: https://artifactory-builds.oci.oraclecorp.com/api/pypi/global-dev-pypi/simple/
+user_guid: nijonsso
+tenancies:
+- name: cdadev
+  label_prefix: dc
+  compartments:
+  - name: dc-si-dp
+    compartment_type: si-dp
+    ocid: ocid1.compartment.oc1..aaaaaaaartt5wdtcuzpz5cosccmcvfsz4ivqiy7xc7nggniub4ljvfg6sefa
+- name: cdastage
+  label_prefix: sc
+  compartments:
+  - name: sc-si-dp
+    compartment_type: si-dp
+    ocid: ocid1.compartment.oc1..aaaaaaaalsglldyfqeueenke2uwzpy7jkuzet7pi4uktsmax4bottdvfq66q
+- name: cdaprod
+  label_prefix: pc
+  compartments:
+  - name: pc-si-dp
+    compartment_type: si-dp
+    ocid: ocid1.compartment.oc1..aaaaaaaah4hi4gcck22z74p24uhgog4nycdutwvmeervwet4zqjpihqbrtwq

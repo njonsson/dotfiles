@@ -1,0 +1,5 @@
+enablePKCS11Fallback: true
+pkcs11LibPath: /usr/local/lib/opensc-pkcs11.so
+providerName: ocna-saml
+remoteUser: nijonsso
+tenancyName: bmc_operator_access

@@ -1,2 +1,58 @@
-Host *.ad1.r2 !bastion*.oracleiaas.com
-    ProxyCommand bash -c 'ssh $(ps -o args= $(ps -o ppid= $$) | grep -o -- " -v[v]*") -W %h:%p bastion-ad1.rb.us-phoenix-1.oci.oracleiaas.com'
+####################################################################
+#
+# For overriding the configuration before the default OSSH/SIEM/ODA
+# settings, please place them in ~/.ssh/pre-setup-override.config.
+#
+# For example, if $USER is not the same as your BOAT GUID, then
+# please define the following in pre-setup-override.conf
+#
+# Host *
+#    User my-boat-guid
+#
+Include pre-setup-override.config
+
+###
+# 
+# ACE/ssh-configs should appear first to override SECEDGE/ssh-configs
+# Refer to OSSH OCI SSH) User Guide For details
+# See: https://confluence.oci.oraclecorp.com/pages/viewpage.action?spaceKey=SS&title=OSSH+%28OCI+SSH%29+User+Guide#OSSH(OCISSH)UserGuide-ssh-configSSHConfigurationFile
+#
+###
+
+Include ossh_configs/*.ossh
+
+####################################################################
+#
+# >>> Start Of ODA Specific SSH Configurations <<<
+
+# Specify oda/ssh-configs/* in between ACE/ssh-configs and SECEDGE/ssh-configs
+#
+# ODA SSH Configurations For OSSH-CA
+
+Include oda-configs/jump.ossh
+Include oda-configs/host.ossh
+
+#
+# ODA SSH Configurations For YubiKey In Development/Test environments
+Include oda-configs/jump.ssh
+
+# >>> End Of ODA Specific SSH Configurations <<<
+#
+###################################################################
+
+
+###
+#
+# SECEDGE/ssh-configs should appear the last (as a fallback)
+#
+# See: https://bitbucket.oci.oraclecorp.com/projects/ACEP/repos/ssh-configs/browse
+###
+
+Include ssh_configs/config
+
+####################################################################
+#
+# For overriding the configuration after the default OSSH/SIEM/ODA
+# settings, please place them in ~/.ssh/post-setup-override.config.
+
+Include post-setup-override.config

@@ -1,0 +1,9 @@
+[submodule "ssh/oda-configs"]
+	path = ssh/oda-configs
+	url = ssh://git@bitbucket.oci.oraclecorp.com:7999/oda/oda-ssh-config.git
+[submodule "ssh/ossh_configs"]
+	path = ssh/ossh_configs
+	url = ssh://git@bitbucket.oci.oraclecorp.com:7999/acep/ssh-configs.git
+[submodule "ssh/ssh_configs"]
+	path = ssh/ssh_configs
+	url = ssh://git@bitbucket.oci.oraclecorp.com:7999/SECEDGE/ssh_configs.git
