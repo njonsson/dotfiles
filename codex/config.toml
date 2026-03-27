@@ -77,3 +77,6 @@ personality = "pragmatic"
 
 [mcp_servers.centralconfluence]
 url = "https://emcp.oracle.com/atlassian/centralconfluence/v2"
+
+[features]
+tui_app_server = false
