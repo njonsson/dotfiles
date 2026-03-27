@@ -10,6 +10,9 @@ web_search = "live"
 [projects."/Users/"]
 trust_level = "trusted"
 
+[projects."/Users/nils.jonsson"]
+trust_level = "trusted"
+
 [sandbox_workspace_write]
 # network_access = true
 # writable_roots = [ "/Users/nils.jonsson/.codex/skills" ]
