@@ -65,3 +65,6 @@ model = "oca/gpt-5.2-codex"
 model_provider = "oca"
 review_model = "oca/gpt-5.2-codex"
 personality = "pragmatic"
+
+[mcp_servers.centralconfluence]
+url = "https://emcp.oracle.com/atlassian/centralconfluence/v2"
