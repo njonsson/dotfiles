@@ -1,0 +1,3 @@
+Host oci*.private.devops.scmservice.*.oci.oracleiaas.com
+   User nijonsso@bmc_operator_access
+   IdentityAgent $HOME/.ssh/scm-agent.sock

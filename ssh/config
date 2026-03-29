@@ -50,6 +50,8 @@ Include oda-configs/jump.ssh
 
 Include ssh_configs/config
 
+Include config-scm
+
 ####################################################################
 #
 # For overriding the configuration after the default OSSH/SIEM/ODA
