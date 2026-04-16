@@ -111,6 +111,12 @@ def render_inline(
         if node.node_type != "element":
             continue
         name = node.name or ""
+        classes = node.attrs.get("class", "")
+        if "aui-lozenge" in classes.split():
+            text = utils.text_content(node.children).strip()
+            if text:
+                pieces.append(utils.wrap_inline_code(text))
+            continue
         if name in {"strong", "b"}:
             content = render_inline(node.children, preserve_soft_breaks, within_code)
             pieces.append(f"**{content}**")

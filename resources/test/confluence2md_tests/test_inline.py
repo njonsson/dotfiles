@@ -38,6 +38,12 @@ class InlineTests(unittest.TestCase):
         rendered = inline.render_inline(paragraph.children)
         self.assertEqual("Click **Submit**", rendered)
 
+    def test_render_inline_renders_aui_lozenge_as_inline_code(self) -> None:
+        root = html_parser.parse_html('<div><p>Status <span class="aui-lozenge aui-lozenge-success">Done</span></p></div>')
+        paragraph = root.children[0].children[0]
+        rendered = inline.render_inline(paragraph.children)
+        self.assertEqual("Status `Done`", rendered)
+
     def test_render_inline_renders_time_elements_using_datetime(self) -> None:
         html = (
             '<div><p><time datetime="2026-04-07" class="date-past">07 Apr 2026</time>'
