@@ -5,9 +5,9 @@ import re
 from typing import Callable, Iterable, List, Optional
 from urllib.parse import quote
 
-from html_nodes import Node, find_all, find_first, parse_html
-from model import Attachment, Message, Reaction
-from utils import (
+from .html_nodes import Node, find_all, find_first, parse_html
+from .model import Attachment, Message, Reaction
+from .utils import (
     clean_text,
     decode_filename,
     ensure_at_prefix,

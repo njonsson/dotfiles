@@ -3,19 +3,25 @@ from __future__ import annotations
 import io
 import sys
 import unittest
+from importlib import util
 from pathlib import Path
 from unittest.mock import patch
 
+if __package__ in {None, ""}:  # pragma: no cover - direct execution
+    init_path = Path(__file__).resolve().parent / "__init__.py"
+    spec = util.spec_from_file_location("slack2md_test_bootstrap", init_path)
+    bootstrap = util.module_from_spec(spec)
+    assert spec and spec.loader
+    spec.loader.exec_module(bootstrap)  # type: ignore[attr-defined]
+else:
+    from importlib import import_module
 
-TEST_ROOT = Path(__file__).resolve().parents[2]
-MODULE_DIR = TEST_ROOT / "slack2md.d"
+    package_name = __package__ or Path(__file__).resolve().parent.name
+    bootstrap = import_module(package_name)  # pragma: no cover
 
-if str(MODULE_DIR) not in sys.path:
-    sys.path.insert(0, str(MODULE_DIR))
-if str(TEST_ROOT) not in sys.path:
-    sys.path.insert(0, str(TEST_ROOT))
+bootstrap.setup()
 
-import cli  # noqa: E402
+from slack2md import cli  # type: ignore  # noqa: E402
 
 
 class _FakeStdin(io.StringIO):
@@ -37,7 +43,7 @@ class CliTests(unittest.TestCase):
             data = cli.read_input(args)
         self.assertEqual(data, "<html>payload</html>")
 
-    def test_read_input_isatty_without_clipboard_raises(self) -> None:
+    def test_read_input_requires_stdin_when_tty(self) -> None:
         parser = cli.build_parser()
         args = parser.parse_args([])
 
@@ -47,16 +53,9 @@ class CliTests(unittest.TestCase):
 
         fake_stdin = _Tty("")
         with patch.object(cli.sys, "stdin", fake_stdin):
-            with self.assertRaises(RuntimeError):
+            with self.assertRaises(RuntimeError) as ctx:
                 cli.read_input(args)
-
-    def test_read_input_uses_clipboard_when_requested(self) -> None:
-        parser = cli.build_parser()
-        args = parser.parse_args(["--clipboard"])
-        with patch("cli.read_clipboard_html", return_value="<html/>") as mock_clip:
-            data = cli.read_input(args)
-        mock_clip.assert_called_once()
-        self.assertEqual(data, "<html/>")
+        self.assertIn("pbpaste-html | slack2md", str(ctx.exception))
 
 
 if __name__ == "__main__":  # pragma: no cover

@@ -1,0 +1,33 @@
+from __future__ import annotations
+
+import sys
+import unittest
+from importlib import util
+from pathlib import Path
+
+if __package__ in {None, ""}:  # pragma: no cover - direct execution
+    init_path = Path(__file__).resolve().parent / "__init__.py"
+    spec = util.spec_from_file_location("confluence2md_test_bootstrap", init_path)
+    bootstrap = util.module_from_spec(spec)
+    assert spec and spec.loader
+    spec.loader.exec_module(bootstrap)  # type: ignore[attr-defined]
+else:
+    bootstrap = sys.modules[__package__]  # pragma: no cover
+
+bootstrap.setup()
+
+from confluence2md import html_parser, inline  # type: ignore  # noqa: E402
+
+
+class InlineTests(unittest.TestCase):
+    def test_render_inline_handles_basic_formatting(self) -> None:
+        root = html_parser.parse_html("<div><p>Hello <strong>World</strong></p></div>")
+        paragraph = root.children[0].children[0]
+        rendered = inline.render_inline(paragraph.children)
+        self.assertEqual("Hello **World**", rendered)
+
+    def test_render_inline_renders_code_spans(self) -> None:
+        root = html_parser.parse_html("<div><p>Use <code>x</code></p></div>")
+        paragraph = root.children[0].children[0]
+        rendered = inline.render_inline(paragraph.children)
+        self.assertEqual("Use `x`", rendered)

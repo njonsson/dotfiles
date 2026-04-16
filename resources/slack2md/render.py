@@ -4,9 +4,9 @@ import datetime as dt
 from html import unescape
 from typing import Iterable, List, Optional
 
-from html_nodes import Node
-from model import Attachment, Message, Reaction
-from utils import (
+from .html_nodes import Node
+from .model import Attachment, Message, Reaction
+from .utils import (
     clean_text,
     escape_markdown,
     normalize_slack_href,

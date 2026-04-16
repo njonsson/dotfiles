@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from typing import List, Optional
 
-from extract import parse_slack_html
-from model import Attachment
-from render import build_message_markdown, render_attachment_fallbacks
+from .extract import parse_slack_html
+from .model import Attachment
+from .render import build_message_markdown, render_attachment_fallbacks
 
 
 def convert(html_text: str, workspace_domain: Optional[str]) -> str:

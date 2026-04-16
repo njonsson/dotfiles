@@ -13,8 +13,7 @@ def _bootstrap_modules() -> None:
 
 _bootstrap_modules()
 
-
-from slack2md import main as _main  # type: ignore  # noqa: E402
+from confluence2md import main as _main  # type: ignore  # noqa: E402
 
 
 def main(argv: list[str] | None = None) -> int:

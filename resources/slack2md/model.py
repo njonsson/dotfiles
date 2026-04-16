@@ -40,4 +40,4 @@ class Message:
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:  # pragma: no cover
-    from html_nodes import Node
+    from .html_nodes import Node

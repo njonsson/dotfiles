@@ -8,7 +8,7 @@ from urllib.parse import unquote, urlparse
 
 from html import unescape
 
-from html_nodes import Node, iter_nodes
+from .html_nodes import Node, iter_nodes
 
 
 NBSP = "\u00A0"

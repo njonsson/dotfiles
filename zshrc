@@ -122,6 +122,8 @@ unsetopt HIST_VERIFY             # Don't do history expansion before executing.
 
 alias git='noglob git'
 alias gitx='/Applications/GitX.app/Contents/Resources/gitx'
+alias pbpaste-html="osascript -e 'the clipboard as «class HTML»' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr(\$_,11,-3)))'"
+alias pbpaste-info="osascript -e 'clipboard info'"
 alias ping='ping -A --apple-time'
 alias rake='noglob rake'
 alias rspec='nocorrect rspec'
