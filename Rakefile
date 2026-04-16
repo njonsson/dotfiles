@@ -233,6 +233,11 @@ namespace :set_up do
   end
 end
 
+desc 'Run all automated tests'
+task :test do
+  fail unless system('python3 -m unittest discover -s resources/test/*')
+end
+
 task :update_git_submodules do
   fail unless system('git submodule update --init')
 end
