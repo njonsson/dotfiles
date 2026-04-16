@@ -12,6 +12,7 @@ INLINE_TAGS = {
     "ac:plain-text-link-body",
     "b",
     "br",
+    "button",
     "code",
     "del",
     "em",
@@ -161,7 +162,7 @@ def _render_block_node(node: html_parser.Node, ctx: RenderContext) -> List[str]:
             return [_apply_blockquote(ctx.blockquote_depth, table_md)]
         return []
     if name == "br":
-        return [_apply_blockquote(ctx.blockquote_depth, utils.hard_line_break().rstrip())]
+        return [_apply_blockquote(ctx.blockquote_depth, utils.hard_line_break())]
     return _render_children_as_blocks(node.children, ctx)
 
 

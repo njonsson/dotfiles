@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import Iterable, List, Optional, Tuple
 
 from . import html_parser, inline
 
@@ -33,10 +33,76 @@ def _extract_alignment(attrs: dict[str, str]) -> Optional[str]:
     return None
 
 
+Fragment = Tuple[str, str]
+
+
+def _has_paragraph_descendant(node: html_parser.Node) -> bool:
+    if node.node_type != "element":
+        return False
+    if node.name == "p":
+        return True
+    for child in node.children:
+        if child.node_type == "element" and _has_paragraph_descendant(child):
+            return True
+    return False
+
+
+def _fragment_cell_content(node: html_parser.Node) -> List[Fragment]:
+    fragments: List[Fragment] = []
+
+    def render(nodes: Iterable[html_parser.Node]) -> str:
+        return inline.render_inline(nodes, preserve_soft_breaks=True)
+
+    def visit(current: html_parser.Node) -> None:
+        if current.node_type == "text":
+            text = render([current])
+            if text.strip():
+                fragments.append(("inline", text))
+            return
+        if current.node_type != "element":
+            return
+        if current.name == "p":
+            content = render(current.children).strip()
+            if content:
+                fragments.append(("paragraph", content))
+            else:
+                fragments.append(("paragraph", ""))
+            return
+        if _has_paragraph_descendant(current):
+            for child in current.children:
+                visit(child)
+            return
+        text = render([current])
+        if text.strip():
+            fragments.append(("inline", text))
+
+    for child in node.children:
+        if child.node_type == "text" and not child.text.strip():
+            continue
+        visit(child)
+    return fragments
+
+
 def _render_cell_text(cell: html_parser.Node) -> str:
-    text = inline.render_inline(cell.children, preserve_soft_breaks=True)
-    text = text.strip()
-    return text.replace("\n", "<br>")
+    fragments = _fragment_cell_content(cell)
+    pieces: List[str] = []
+    prev_type: Optional[str] = None
+
+    for fragment_type, content in fragments:
+        if not content:
+            if fragment_type == "paragraph":
+                prev_type = "paragraph"
+            continue
+        if fragment_type == "paragraph":
+            if pieces and prev_type == "paragraph":
+                pieces.append("<br/><br/>")
+            pieces.append(content)
+        else:
+            pieces.append(content)
+        prev_type = fragment_type
+
+    text = "".join(pieces).strip()
+    return text.replace("\n", "<br/>")
 
 
 def _collect_rows(parent: html_parser.Node) -> List[TableRow]:

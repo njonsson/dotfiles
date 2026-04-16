@@ -43,3 +43,23 @@ class TablesTests(unittest.TestCase):
             "| Left | Right | Center |\n| :--- | ---: | :---: |\n| One | Two | Three |",
             rendered,
         )
+
+    def test_render_table_converts_paragraph_boundaries_to_double_breaks(self) -> None:
+        root = html_parser.parse_html(
+            """
+            <table>
+              <tr>
+                <th>Header</th>
+              </tr>
+              <tr>
+                <td><div><div><p>First</p><p>Second</p></div></div></td>
+              </tr>
+            </table>
+            """
+        )
+        table_node = next(child for child in root.children if child.node_type == "element")
+        rendered = tables.render_table(table_node)
+        self.assertEqual(
+            "| Header |\n| --- |\n| First<br/><br/>Second |",
+            rendered,
+        )

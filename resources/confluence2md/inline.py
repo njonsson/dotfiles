@@ -123,6 +123,9 @@ def render_inline(
         elif name in {"s", "strike", "del"}:
             content = render_inline(node.children, preserve_soft_breaks, within_code)
             pieces.append(f"~~{content}~~")
+        elif name == "button":
+            content = render_inline(node.children, preserve_soft_breaks, within_code)
+            pieces.append(f"**{content}**")
         elif name == "sup":
             content = render_inline(node.children, preserve_soft_breaks, within_code)
             pieces.append(f"<sup>{content}</sup>")
