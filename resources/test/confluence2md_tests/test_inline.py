@@ -31,3 +31,13 @@ class InlineTests(unittest.TestCase):
         paragraph = root.children[0].children[0]
         rendered = inline.render_inline(paragraph.children)
         self.assertEqual("Use `x`", rendered)
+
+    def test_render_inline_renders_time_elements_using_datetime(self) -> None:
+        html = (
+            '<div><p><time datetime="2026-04-07" class="date-past">07 Apr 2026</time>'
+            " in Confluence</p></div>"
+        )
+        root = html_parser.parse_html(html)
+        paragraph = root.children[0].children[0]
+        rendered = inline.render_inline(paragraph.children)
+        self.assertEqual("`🗓️ 7 Apr 2026` in Confluence", rendered)

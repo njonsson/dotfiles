@@ -234,9 +234,10 @@ namespace :set_up do
 end
 
 TESTS = Dir.
-  glob('resources/test/*').
+  glob('resources/test/*_tests').
   select(&File.method(:directory?)).
-  collect(&File.method(:basename))
+  collect(&File.method(:basename)).
+  collect { |d| d.sub(/_tests$/, '') }
 
 desc 'Run all automated tests'
 task :test => TESTS.flat_map { |t| ["test:#{t}:announce", "test:#{t}"] }
@@ -245,7 +246,7 @@ namespace :test do
   TESTS.each do |t|
     desc "Run \e[4m#{t}\e[24m automated tests"
     task t do
-      fail unless system("python3 -m unittest discover -s resources/test/#{t}")
+      fail unless system("python3 -m unittest discover -s resources/test/#{t}_tests")
     end
 
     namespace t do

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Iterable, List
+from datetime import date, datetime
+from typing import Iterable, List, Optional
 
 from . import html_parser, utils
 
@@ -60,6 +61,38 @@ def _apply_span_behaviors(text: str, behaviors: dict[str, bool]) -> str:
     if behaviors.get("strike"):
         text = f"~~{text}~~"
     return text
+
+
+def _parse_datetime_value(value: str) -> Optional[date]:
+    cleaned = (value or "").strip()
+    if not cleaned:
+        return None
+
+    iso_value = cleaned
+    if iso_value.endswith("Z"):
+        iso_value = iso_value[:-1] + "+00:00"
+
+    try:
+        return datetime.fromisoformat(iso_value).date()
+    except ValueError:
+        pass
+
+    date_part = cleaned.split("T", 1)[0]
+    try:
+        return date.fromisoformat(date_part)
+    except ValueError:
+        return None
+
+
+def _render_time_element(node: html_parser.Node, preserve_soft_breaks: bool, within_code: bool) -> Optional[str]:
+    datetime_value = node.attrs.get("datetime", "")
+    parsed_date = _parse_datetime_value(datetime_value)
+    if not parsed_date:
+        return render_inline(node.children, preserve_soft_breaks, within_code)
+
+    month = parsed_date.strftime("%b")
+    display = f"🗓️ {parsed_date.day} {month} {parsed_date.year}"
+    return utils.wrap_inline_code(display)
 
 
 def render_inline(
@@ -137,6 +170,10 @@ def render_inline(
                 pieces.append(f"![{alt_text}]({src} \"{title}\")")
             else:
                 pieces.append(f"![{alt_text}]({src})")
+        elif name == "time":
+            rendered = _render_time_element(node, preserve_soft_breaks, within_code)
+            if rendered:
+                pieces.append(rendered)
         elif name in {"ac:image", "ac:link"}:
             # Confluence macro wrappers; render children.
             pieces.append(render_inline(node.children, preserve_soft_breaks, within_code))
