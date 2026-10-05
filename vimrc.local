@@ -19,7 +19,3 @@ let g:solarized_termcolors=256
 let g:solarized_termtrans=1
 colorscheme solarized
 set mouse=a
-
-" Vim Powerline status bar
-set encoding=utf-8
-let g:Powerline_symbols = 'fancy'
