@@ -53,7 +53,9 @@ def generate_or_symlink(source)
     target = yield(source)
     return unless delete_if_exists(target)
     begin
-      File.symlink source, target
+      Dir.chdir(Pathname.new(target).parent) do
+        File.symlink Pathname.new(source).relative_path_from(target + '/..'), basename(target)
+      end
     rescue NotImplementedError
       warning 'Symlinks are not supported on your system'
       return unless system("cp #{source} #{target}")
