@@ -1,10 +1,27 @@
 require 'erb'
+require 'Pathname'
 
 DOTFILES_SENTINEL_FILENAME = '.DOTFILES'
+EXTENSIONS_TO_DROP = %w(
+  .bash
+  .erb
+  .py
+  .rb
+  .sh
+)
 HOME = ENV['HOME']
 TARGET_DIR_BIN = "#{HOME}/bin"
 TARGET_DIR_DOTFILES = HOME
 TARGET_DIR_FONTS = "#{HOME}/Library/Fonts"
+
+def basename(path)
+  ext = File.extname(path)
+  if EXTENSIONS_TO_DROP.include?(ext)
+    File.basename path, ext
+  else
+    File.basename path
+  end
+end
 
 def delete_if_exists(file)
   if File.exist?(file) || File.symlink?(file)
@@ -25,7 +42,7 @@ end
 
 def generate_or_symlink(source)
   if erb?(source)
-    source_basename = File.basename(source, File.extname(source))
+    source_basename = basename(source)
     target = yield("#{File.dirname source}/#{source_basename}")
     return unless delete_if_exists(target)
     File.open target, 'w' do |f|
@@ -114,7 +131,7 @@ namespace :set_up do
     pattern = "#{File.expand_path File.dirname(__FILE__)}/resources/*.{bash,rb,sh}"
     Dir.glob(pattern) do |script|
       generate_or_symlink script do |source|
-        source_basename = File.basename(source, File.extname(source))
+        source_basename = basename(source)
         "#{TARGET_DIR_BIN}/#{source_basename}"
       end
     end
@@ -151,7 +168,7 @@ namespace :set_up do
       end
 
       generate_or_symlink entry do |source|
-        source_basename = File.basename(source, File.extname(source))
+        source_basename = basename(source)
         "#{TARGET_DIR_DOTFILES}/.#{source_basename}"
       end
     end
